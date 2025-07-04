@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solange Network Automation Suite</title>
+    <link rel="stylesheet" href="static/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-network-wired"></i>
+                    <h1>Solange Network Automation Suite</h1>
+                </div>
+                <div class="status-indicator" id="statusIndicator">
+                    <span class="status-text">System Ready</span>
+                    <div class="status-dot ready"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="dashboard">
+                <i class="fas fa-dashboard"></i>
+                Dashboard
+            </button>
+            <button class="nav-tab" data-tab="devices">
+                <i class="fas fa-router"></i>
+                Devices
+            </button>
+            <button class="nav-tab" data-tab="backup">
+                <i class="fas fa-save"></i>
+                Backup
+            </button>
+            <button class="nav-tab" data-tab="config">
+                <i class="fas fa-cogs"></i>
+                Configuration
+            </button>
+            <button class="nav-tab" data-tab="security">
+                <i class="fas fa-shield-alt"></i>
+                Security
+            </button>
+            <button class="nav-tab" data-tab="logs">
+                <i class="fas fa-file-alt"></i>
+                Logs
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Tab -->
+            <div class="tab-content active" id="dashboard">
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-chart-line"></i> System Overview</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <div class="stat-value" id="deviceCount">0</div>
+                                    <div class="stat-label">Connected Devices</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="lastBackup">Never</div>
+                                    <div class="stat-label">Last Backup</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="activeJobs">0</div>
+                                    <div class="stat-label">Active Jobs</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-play"></i> Quick Actions</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="quick-actions">
+                                <button class="action-btn primary" onclick="discoverDevices()">
+                                    <i class="fas fa-search"></i>
+                                    Discover Devices
+                                </button>
+                                <button class="action-btn secondary" onclick="backupAll()">
+                                    <i class="fas fa-download"></i>
+                                    Backup All
+                                </button>
+                                <button class="action-btn warning" onclick="testConnectivity()">
+                                    <i class="fas fa-wifi"></i>
+                                    Test Connectivity
+                                </button>
+                                <button class="action-btn info" onclick="viewLogs()">
+                                    <i class="fas fa-eye"></i>
+                                    View Logs
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card full-width">
+                        <div class="card-header">
+                            <h3><i class="fas fa-terminal"></i> Activity Log</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="activity-log" id="activityLog">
+                                <div class="log-entry">
+                                    <span class="timestamp">[2025-07-04 14:11:09]</span>
+                                    <span class="level info">INFO</span>
+                                    <span class="message">System initialized successfully</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Devices Tab -->
+            <div class="tab-content" id="devices">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-router"></i> Network Devices</h3>
+                        <button class="btn primary" onclick="refreshDevices()">
+                            <i class="fas fa-refresh"></i>
+                            Refresh
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="devices-grid" id="devicesGrid">
+                            <!-- Devices will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Backup Tab -->
+            <div class="tab-content" id="backup">
+                <div class="backup-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-save"></i> Backup Operations</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="backup-controls">
+                                <button class="btn primary large" onclick="performBackup()">
+                                    <i class="fas fa-download"></i>
+                                    Backup All Devices
+                                </button>
+                                <button class="btn secondary large" onclick="scheduleBackup()">
+                                    <i class="fas fa-clock"></i>
+                                    Schedule Backup
+                                </button>
+                            </div>
+                            <div class="backup-progress" id="backupProgress" style="display: none;">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="progressFill"></div>
+                                </div>
+                                <div class="progress-text" id="progressText">Backing up devices...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-history"></i> Backup History</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="backup-list" id="backupList">
+                                <!-- Backup history will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configuration Tab -->
+            <div class="tab-content" id="config">
+                <div class="config-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-cogs"></i> Bulk Configuration</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="config-editor">
+                                <textarea id="configCommands" placeholder="Enter configuration commands (one per line)...
+# Example:
+interface loopback 0
+ip address 192.168.100.1 255.255.255.255
+no shutdown
+exit"></textarea>
+                                <div class="editor-controls">
+                                    <button class="btn secondary" onclick="loadTemplate()">
+                                        <i class="fas fa-file-import"></i>
+                                        Load Template
+                                    </button>
+                                    <button class="btn primary" onclick="applyConfiguration()">
+                                        <i class="fas fa-play"></i>
+                                        Apply Configuration
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-file-code"></i> Configuration Templates</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="template-list" id="templateList">
+                                <!-- Templates will be populated here -->
+                            </div>
+                            <button class="btn success" onclick="createTemplate()">
+                                <i class="fas fa-plus"></i>
+                                Create New Template
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Tab -->
+            <div class="tab-content" id="security">
+                <div class="security-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-key"></i> Password Management</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="password-controls">
+                                <div class="form-group">
+                                    <label for="newUsername">Username:</label>
+                                    <input type="text" id="newUsername" placeholder="admin">
+                                </div>
+                                <div class="form-group">
+                                    <label for="newPassword">New Password:</label>
+                                    <input type="password" id="newPassword" placeholder="Enter new password">
+                                </div>
+                                <div class="form-group">
+                                    <label for="enableSecret">Enable Secret:</label>
+                                    <input type="password" id="enableSecret" placeholder="Enter enable secret (optional)">
+                                </div>
+                                <div class="button-group">
+                                    <button class="btn warning" onclick="enablePasswordAuth()">
+                                        <i class="fas fa-unlock"></i>
+                                        Enable Password Auth
+                                    </button>
+                                    <button class="btn danger" onclick="rotatePasswords()">
+                                        <i class="fas fa-sync"></i>
+                                        Rotate Passwords
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-calendar"></i> Password Schedule</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="schedule-info" id="scheduleInfo">
+                                <p>Next password rotation: <span class="highlight">Not scheduled</span></p>
+                                <p>Last rotation: <span class="highlight">Never</span></p>
+                            </div>
+                            <button class="btn info" onclick="createSchedule()">
+                                <i class="fas fa-calendar-plus"></i>
+                                Create Schedule
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logs Tab -->
+            <div class="tab-content" id="logs">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-file-alt"></i> System Logs</h3>
+                        <div class="log-controls">
+                            <select id="logLevel">
+                                <option value="all">All Levels</option>
+                                <option value="info">Info</option>
+                                <option value="warning">Warning</option>
+                                <option value="error">Error</option>
+                            </select>
+                            <button class="btn secondary" onclick="refreshLogs()">
+                                <i class="fas fa-refresh"></i>
+                                Refresh
+                            </button>
+                            <button class="btn info" onclick="downloadLogs()">
+                                <i class="fas fa-download"></i>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="log-viewer" id="logViewer">
+                            <!-- Logs will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Modal for operations -->
+        <div class="modal" id="operationModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTitle">Operation in Progress</h3>
+                    <button class="modal-close" onclick="closeModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="operation-status" id="operationStatus">
+                        <div class="spinner"></div>
+                        <p id="operationMessage">Please wait...</p>
+                    </div>
+                    <div class="operation-log" id="operationLog"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="static/script.js"></script>
+</body>
+</html>

@@ -3,3 +3,7 @@ paramiko
 asyncio
 requests
 gns3fy
+pyyaml
+colorama
+flask
+flask-cors

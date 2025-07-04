@@ -4,105 +4,39 @@ import time
 import logging
 import json
 import yaml
-import os
-import requests
 from datetime import datetime
-
-# Create logs directory if it doesn't exist
-log_dir = '../logs'
-if not os.path.exists(log_dir):
-    os.makedirs(log_dir)
 
 # Set up logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('../logs/gns3_automation.log'),
+        logging.FileHandler('logs/gns3_automation.log'),
         logging.StreamHandler()
     ]
 )
 
 # Set up GNS3 connection
-try:
-    gns3 = Gns3Connector(url="http://localhost:3080")
-    print("✓ Connected to GNS3 server")
-except Exception as e:
-    print(f"✗ Failed to connect to GNS3 server: {e}")
-    print("Make sure GNS3 is running on localhost:3080")
-    exit(1)
+gns3 = Gns3Connector(url="http://localhost:3080")
+# gns3.auth(username="your_username", password="your_password")
 
 # Get the project and nodes
-try:
-    # Get project information as dictionary
-    project_info = gns3.get_project(name="Solange")
-    if not project_info:
-        print("✗ Project 'Solange' not found")
-        exit(1)
-    
-    print(f"✓ Found project: {project_info.get('name', 'Unknown')}")
-    project_id = project_info.get('project_id')
-    
-    if not project_id:
-        print("✗ Could not get project ID")
-        exit(1)
-    
-    # Get nodes using HTTP API directly
-    import requests
-    nodes_url = f"http://localhost:3080/v2/projects/{project_id}/nodes"
-    response = requests.get(nodes_url)
-    
-    if response.status_code == 200:
-        nodes_data = response.json()
-        print(f"✓ Found {len(nodes_data)} nodes in project")
-    else:
-        print(f"✗ Failed to get nodes: HTTP {response.status_code}")
-        exit(1)
-        
-except Exception as e:
-    print(f"✗ Failed to get project 'Solange': {e}")
-    print("Make sure the 'Solange' project is open in GNS3")
-    exit(1)
+project = gns3.get_project(name="Solange")
+nodes = project.nodes()
 
 # Collect device information
 devices_info = []
-for node_data in nodes_data:
-    if node_data.get('status') == "started":  # Only include running devices
-        # Try to get IP address from node properties
-        node_name = node_data.get('name', 'Unknown')
-        node_id = node_data.get('node_id')
-        
-        # For now, we'll need to manually determine IP addresses
-        # or use console port for further configuration
-        console_port = node_data.get('console')
-        
-        # You may need to configure static IPs or use DHCP
-        # For this example, let's assume your devices have known IPs
-        device_ip = None
-        
-        # Map device names to IPs (you'll need to update this based on your setup)
-        device_ip_map = {
-            'Baraton': '192.168.1.1',  # Your router's IP
-            'R1': '192.168.1.1',       # Assuming R1 is your Baraton router
-            'Switch1': '192.168.1.2',  # Switch IP (if managed)
-            'PC1': '192.168.1.10',     # PC1 IP
-            'PC2': '192.168.1.11',     # PC2 IP
-            # Add other devices here as needed
-        }
-        
-        if node_name in device_ip_map:
-            device_ip = device_ip_map[node_name]
-        
+for node in nodes:
+    if node.status == "started":  # Only include running devices
+        device_ip = node.get_ip()
         if device_ip:
             devices_info.append({
-                'name': node_name,
+                'name': node.name,
                 'ip': device_ip,
-                'node_id': node_id,
-                'console_port': console_port
+                'node_id': node.node_id,
+                'console_port': getattr(node, 'console', None)
             })
-            logging.info(f"Found device: {node_name} at {device_ip}")
-        else:
-            print(f"⚠ Device {node_name} found but no IP configured - add to device_ip_map")
+            logging.info(f"Found device: {node.name} at {device_ip}")
 
 # Function to create device connection configuration for SSH
 def create_device_config(device_info):
@@ -197,11 +131,7 @@ if __name__ == "__main__":
         })
     
     # Save to YAML file for other scripts to use
-    config_dir = '../config'
-    if not os.path.exists(config_dir):
-        os.makedirs(config_dir)
-        
-    with open('../config/devices_config.yaml', 'w') as f:
+    with open('config/devices_config.yaml', 'w') as f:
         yaml.dump(config_data, f, default_flow_style=False)
     
     print(f"\nDevice configuration saved to config/devices_config.yaml")
