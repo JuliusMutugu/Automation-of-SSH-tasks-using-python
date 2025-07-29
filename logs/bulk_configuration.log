@@ -1,0 +1,65 @@
+2025-07-29 13:49:43,823 - INFO - Starting bulk configuration process...
+2025-07-29 13:49:43,823 - INFO - Loading device config from: C:\Users\Julimore\Documents\SolangeFinalPresentation\Automation-of-SSH-tasks-using-python\config\devices_config.yaml
+2025-07-29 13:49:43,826 - INFO - Loaded config: {'devices': [{'device_type': 'cisco_ios_telnet', 'fast_cli': False, 'global_delay_factor': 2, 'host': '127.0.0.1', 'last_tested': '2025-07-29T13:17:03.800154', 'management_ip': '192.168.1.10', 'name': 'R1', 'password': '', 'port': 5000, 'real_hostname': 'Baraton', 'secret': '', 'timeout': 30, 'username': ''}, {'device_type': 'cisco_ios_telnet', 'fast_cli': False, 'global_delay_factor': 2, 'host': '127.0.0.1', 'last_tested': '2025-07-29T13:17:12.846624', 'management_ip': '192.168.1.20', 'name': 'R2', 'password': '', 'port': 5008, 'real_hostname': 'library', 'secret': '', 'timeout': 30, 'username': ''}]}
+2025-07-29 13:49:43,827 - INFO - Loaded 17 configuration commands
+2025-07-29 13:49:43,827 - INFO - Starting bulk configuration of 2 devices...
+2025-07-29 13:49:43,828 - INFO - Commands to apply: 17
+2025-07-29 13:49:43,828 - INFO - Connecting to R1 (127.0.0.1:5000) via console
+2025-07-29 13:49:49,853 - INFO - Connected to R1 - Baraton via console
+2025-07-29 13:50:00,779 - ERROR - Failed to apply configuration to R1: 
+Pattern not detected: 'Baraton\\#' in output.
+
+Things you might try to fix this:
+1. Explicitly set your pattern using the expect_string argument.
+2. Increase the read_timeout to a larger value.
+
+You can also look at the Netmiko session_log or debug log for more information.
+
+
+2025-07-29 13:50:02,780 - INFO - Connecting to R2 (127.0.0.1:5008) via console
+2025-07-29 13:50:07,734 - INFO - Connected to R2 - library via console
+2025-07-29 13:50:18,648 - ERROR - Failed to apply configuration to R2: 
+Pattern not detected: 'deciRouter\\#' in output.
+
+Things you might try to fix this:
+1. Explicitly set your pattern using the expect_string argument.
+2. Increase the read_timeout to a larger value.
+
+You can also look at the Netmiko session_log or debug log for more information.
+
+
+2025-07-29 13:50:20,650 - INFO - Bulk configuration completed: 0/2 devices successful
+2025-07-29 13:54:19,125 - INFO - Starting bulk configuration process...
+2025-07-29 13:54:19,126 - INFO - Loading device config from: C:\Users\Julimore\Documents\SolangeFinalPresentation\Automation-of-SSH-tasks-using-python\config\devices_config.yaml
+2025-07-29 13:54:19,128 - INFO - Loaded config: {'devices': [{'device_type': 'cisco_ios_telnet', 'fast_cli': False, 'global_delay_factor': 2, 'host': '127.0.0.1', 'last_tested': '2025-07-29T13:17:03.800154', 'management_ip': '192.168.1.10', 'name': 'R1', 'password': '', 'port': 5000, 'real_hostname': 'Baraton', 'secret': '', 'timeout': 30, 'username': ''}, {'device_type': 'cisco_ios_telnet', 'fast_cli': False, 'global_delay_factor': 2, 'host': '127.0.0.1', 'last_tested': '2025-07-29T13:17:12.846624', 'management_ip': '192.168.1.20', 'name': 'R2', 'password': '', 'port': 5008, 'real_hostname': 'library', 'secret': '', 'timeout': 30, 'username': ''}]}
+2025-07-29 13:54:19,129 - INFO - Loaded 17 configuration commands
+2025-07-29 13:54:19,130 - INFO - Starting bulk configuration of 2 devices...
+2025-07-29 13:54:19,130 - INFO - Commands to apply: 17
+2025-07-29 13:54:19,130 - INFO - Connecting to R1 (127.0.0.1:5000) via console
+2025-07-29 13:54:24,313 - INFO - Connected to R1 - Baraton via console
+2025-07-29 13:54:24,314 - INFO - Applying 17 commands to R1
+2025-07-29 13:54:28,379 - INFO - Configuration output for R1: interface loopback 0
+Baraton(config-if)#ip address 192.168.100.1 255.255.255.255
+Baraton(config-if)#no shutdown
+Baraton(config-if)#exit
+Baraton(config)#router ospf 1
+Baraton(config-router)#network 192...
+2025-07-29 13:54:30,464 - INFO - Save result for R1: Building configuration...
+[OK]
+Baraton#
+2025-07-29 13:54:30,465 - INFO - Configuration applied to R1 (Baraton) successfully.
+2025-07-29 13:54:32,488 - INFO - Connecting to R2 (127.0.0.1:5008) via console
+2025-07-29 13:54:35,783 - INFO - Connected to R2 - library via console
+2025-07-29 13:54:35,784 - INFO - Applying 17 commands to R2
+2025-07-29 13:54:39,908 - INFO - Configuration output for R2: 
+deciRouter(config)#interface loopback 0
+deciRouter(config-if)#ip address 192.168.100.1 255.255.255.255
+deciRouter(config-if)#no shutdown
+deciRouter(config-if)#exit
+deciRouter(config)#router ospf 1
+de...
+2025-07-29 13:54:42,328 - INFO - Save result for R2: Building configuration...
+[OK]
+deciRouter#
+2025-07-29 13:54:42,328 - INFO - Configuration applied to R2 (library) successfully.
+2025-07-29 13:54:44,365 - INFO - Bulk configuration completed: 2/2 devices successful

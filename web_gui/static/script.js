@@ -631,16 +631,18 @@ function loadLogs() {
 
 // Modal functions
 function showModal(title, content) {
-    const modal = document.getElementById('modal');
+    const modal = document.getElementById('operationModal');
     const modalTitle = document.getElementById('modalTitle');
-    const modalBody = document.getElementById('modalBody');
+    const modalBody = document.querySelector('.modal-body');
     
-    modalTitle.textContent = title;
-    modalBody.innerHTML = content;
-    modal.style.display = 'block';
-    
-    // Add escape key listener
-    document.addEventListener('keydown', handleModalEscape);
+    if (modal && modalTitle && modalBody) {
+        modalTitle.textContent = title;
+        modalBody.innerHTML = content;
+        modal.style.display = 'block';
+        
+        // Add escape key listener
+        document.addEventListener('keydown', handleModalEscape);
+    }
 }
 
 function handleModalEscape(e) {
@@ -650,8 +652,10 @@ function handleModalEscape(e) {
 }
 
 function closeModal() {
-    const modal = document.getElementById('modal');
-    modal.style.display = 'none';
+    const modal = document.getElementById('operationModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
     document.removeEventListener('keydown', handleModalEscape);
 }
 
@@ -748,7 +752,7 @@ function startProgressMonitoring(operationType) {
     
     const interval = setInterval(async () => {
         try {
-            const status = await apiCall('/status');
+            const status = await apiCall('/operation/status');
             
             if (status.operation_complete) {
                 progress = 100;

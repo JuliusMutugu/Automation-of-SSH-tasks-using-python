@@ -27,10 +27,23 @@ def load_device_config(config_file='../config/devices_config.yaml'):
 # Function to enable password authentication on a device (since currently disabled)
 def enable_password_auth(device, username, password, enable_secret=None):
     try:
-        # Establish SSH connection to the device
-        connection = ConnectHandler(**device)
+        # Clean device config for netmiko - remove metadata fields
+        clean_config = {
+            'device_type': device['device_type'],
+            'host': device['host'],
+            'port': device['port'],
+            'username': device.get('username', ''),
+            'password': device.get('password', ''),
+            'secret': device.get('secret', ''),
+            'timeout': device.get('timeout', 30),
+            'fast_cli': device.get('fast_cli', False),
+            'global_delay_factor': device.get('global_delay_factor', 2)
+        }
+        
+        # Establish console telnet connection to the device
+        connection = ConnectHandler(**clean_config)
         connection.enable()
-        logging.info(f"Connected to {device.get('name', device['host'])}")
+        logging.info(f"Connected to {device.get('name', device['host'])} via console")
 
         # Enter global configuration mode
         connection.send_command('configure terminal')
@@ -68,10 +81,23 @@ def enable_password_auth(device, username, password, enable_secret=None):
 # Function to change the password of a device
 def rotate_password(device, username, new_password, enable_secret=None):
     try:
-        # Establish SSH connection to the device
-        connection = ConnectHandler(**device)
+        # Clean device config for netmiko - remove metadata fields
+        clean_config = {
+            'device_type': device['device_type'],
+            'host': device['host'],
+            'port': device['port'],
+            'username': device.get('username', ''),
+            'password': device.get('password', ''),
+            'secret': device.get('secret', ''),
+            'timeout': device.get('timeout', 30),
+            'fast_cli': device.get('fast_cli', False),
+            'global_delay_factor': device.get('global_delay_factor', 2)
+        }
+        
+        # Establish console telnet connection to the device
+        connection = ConnectHandler(**clean_config)
         connection.enable()
-        logging.info(f"Connected to {device.get('name', device['host'])}")
+        logging.info(f"Connected to {device.get('name', device['host'])} via console")
 
         # Enter global configuration mode
         connection.send_command('configure terminal')

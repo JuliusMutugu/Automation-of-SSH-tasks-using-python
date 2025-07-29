@@ -1,0 +1,55 @@
+2025-07-22 23:16:57,245 - INFO - Found router: R1 accessible via 127.0.0.1:5000 (telnet)
+2025-07-22 23:16:57,246 - INFO - Found router: R2 accessible via 127.0.0.1:5008 (telnet)
+2025-07-22 23:17:02,559 - INFO - Console connection successful to R1 (127.0.0.1:5000)
+2025-07-22 23:17:07,782 - INFO - Console connection successful to R2 (127.0.0.1:5008)
+2025-07-22 23:18:54,286 - INFO - Found router: R1 accessible via 127.0.0.1:5000 (telnet)
+2025-07-22 23:18:54,287 - INFO - Found router: R2 accessible via 127.0.0.1:5008 (telnet)
+2025-07-22 23:18:59,451 - INFO - Console connection successful to R1 (127.0.0.1:5000)
+2025-07-22 23:19:04,671 - INFO - Console connection successful to R2 (127.0.0.1:5008)
+2025-07-22 23:23:04,176 - INFO - Found router: R1 accessible via 127.0.0.1:5000 (telnet)
+2025-07-22 23:23:04,176 - INFO - Found router: R2 accessible via 127.0.0.1:5008 (telnet)
+2025-07-22 23:23:09,372 - INFO - Console connection successful to R1 (127.0.0.1:5000)
+2025-07-22 23:23:09,372 - ERROR - Console connection failed to R1 (127.0.0.1:5000): 'charmap' codec can't encode character '\u2705' in position 2: character maps to <undefined>
+2025-07-22 23:31:01,514 - INFO - Found router: R1 accessible via 127.0.0.1:5000 (telnet)
+2025-07-22 23:31:01,514 - INFO - Found router: R2 accessible via 127.0.0.1:5008 (telnet)
+2025-07-22 23:31:07,525 - INFO - Console connection successful to R1 (127.0.0.1:5000)
+2025-07-29 13:10:08,508 - INFO - Connected to GNS3 server
+2025-07-29 13:10:08,544 - INFO - Found project: Solange
+2025-07-29 13:10:08,550 - INFO - Found 7 nodes in project
+2025-07-29 13:10:08,550 - INFO - Found router: R1 accessible via 127.0.0.1:5000 (telnet)
+2025-07-29 13:10:08,551 - INFO - Skipping Switch1 - ethernet_switch (not a router)
+2025-07-29 13:10:08,551 - INFO - Skipping PC1 - vpcs (not a router)
+2025-07-29 13:10:08,552 - INFO - Skipping PC2 - vpcs (not a router)
+2025-07-29 13:10:08,552 - INFO - Skipping PC3 - vpcs (not a router)
+2025-07-29 13:10:08,553 - INFO - Found router: R2 accessible via 127.0.0.1:5008 (telnet)
+2025-07-29 13:10:08,554 - INFO - Skipping PC4 - vpcs (not a router)
+2025-07-29 13:10:08,555 - INFO - Connecting to R1 via 127.0.0.1:5000 (telnet)
+2025-07-29 13:10:18,157 - INFO - Console connection successful to R1 (127.0.0.1:5000)
+2025-07-29 13:10:18,158 - INFO - Real device uptime: Baraton uptime is 27 minutes
+2025-07-29 13:10:18,192 - INFO - Connecting to R2 via 127.0.0.1:5008 (telnet)
+2025-07-29 13:10:27,244 - INFO - Console connection successful to R2 (127.0.0.1:5008)
+2025-07-29 13:10:27,244 - INFO - Real device uptime: library uptime is 22 minutes
+2025-07-29 13:10:27,271 - INFO - YAML configuration saved to config/devices_config.yaml
+2025-07-29 13:10:27,272 - INFO - JSON cache saved to config/devices_cache.json
+2025-07-29 13:16:54,077 - INFO - Connected to GNS3 server
+2025-07-29 13:16:54,089 - INFO - Found project: Solange
+2025-07-29 13:16:54,096 - INFO - Found 7 nodes in project
+2025-07-29 13:16:54,097 - INFO - Found router: R1 accessible via 127.0.0.1:5000 (telnet)
+2025-07-29 13:16:54,098 - INFO - Skipping Switch1 - ethernet_switch (not a router)
+2025-07-29 13:16:54,098 - INFO - Skipping PC1 - vpcs (not a router)
+2025-07-29 13:16:54,098 - INFO - Skipping PC2 - vpcs (not a router)
+2025-07-29 13:16:54,099 - INFO - Skipping PC3 - vpcs (not a router)
+2025-07-29 13:16:54,099 - INFO - Found router: R2 accessible via 127.0.0.1:5008 (telnet)
+2025-07-29 13:16:54,099 - INFO - Skipping PC4 - vpcs (not a router)
+2025-07-29 13:16:54,101 - INFO - Connecting to R1 via 127.0.0.1:5000 (telnet)
+2025-07-29 13:17:03,767 - INFO - Console connection successful to R1 (127.0.0.1:5000)
+2025-07-29 13:17:03,767 - INFO - Real device uptime: Baraton uptime is 30 minutes
+2025-07-29 13:17:03,800 - INFO - Connecting to R2 via 127.0.0.1:5008 (telnet)
+2025-07-29 13:17:12,829 - INFO - Console connection successful to R2 (127.0.0.1:5008)
+2025-07-29 13:17:12,831 - INFO - Real device uptime: library uptime is 25 minutes
+2025-07-29 13:17:12,868 - INFO - YAML configuration saved to config/devices_config.yaml
+2025-07-29 13:17:12,870 - INFO - JSON cache saved to config/devices_cache.json
+2025-07-29 14:03:21,868 - INFO - Found router: R1 accessible via 127.0.0.1:5000 (telnet)
+2025-07-29 14:03:21,868 - INFO - Found router: R2 accessible via 127.0.0.1:5008 (telnet)
+2025-07-29 14:03:31,540 - INFO - Console connection successful to R1 (127.0.0.1:5000)
+2025-07-29 14:03:39,831 - INFO - Console connection successful to R2 (127.0.0.1:5008)

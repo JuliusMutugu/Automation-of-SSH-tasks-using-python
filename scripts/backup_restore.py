@@ -16,7 +16,7 @@ logging.basicConfig(
 )
 
 # Function to load device configurations from the YAML file
-def load_device_config(config_file='../config/devices_config.yaml'):
+def load_device_config(config_file='config/devices_config.yaml'):
     try:
         with open(config_file, 'r') as file:
             return yaml.safe_load(file)
@@ -27,17 +27,30 @@ def load_device_config(config_file='../config/devices_config.yaml'):
 # Function to backup a device's configuration
 def backup_device(device):
     try:
-        # Establish SSH connection to the device
-        connection = ConnectHandler(**device)
+        # Clean device config for netmiko - remove metadata fields
+        clean_config = {
+            'device_type': device['device_type'],
+            'host': device['host'],
+            'port': device['port'],
+            'username': device.get('username', ''),
+            'password': device.get('password', ''),
+            'secret': device.get('secret', ''),
+            'timeout': device.get('timeout', 30),
+            'fast_cli': device.get('fast_cli', False),
+            'global_delay_factor': device.get('global_delay_factor', 2)
+        }
+        
+        # Establish console telnet connection to the device
+        connection = ConnectHandler(**clean_config)
         connection.enable()  # Enter enable mode
-        logging.info(f"Connected to {device.get('name', device['host'])}")
+        logging.info(f"Connected to {device.get('name', device['host'])} via console")
 
         # Get the current device configuration
         config = connection.send_command('show running-config')
         startup_config = connection.send_command('show startup-config')
 
         # Create backup directory if it doesn't exist
-        backup_dir = "../backups"
+        backup_dir = "backups"
         if not os.path.exists(backup_dir):
             os.makedirs(backup_dir)
 

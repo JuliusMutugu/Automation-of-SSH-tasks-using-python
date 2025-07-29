@@ -1,0 +1,229 @@
+2025-07-22 23:24:25,128 - INFO - Connecting to R1 via console...
+2025-07-22 23:24:30,217 - INFO - Connected to Baraton - configuring SSH...
+2025-07-22 23:24:30,456 - INFO - Executing: hostname Baraton
+2025-07-22 23:24:30,689 - INFO - Executing: ip domain-name automation.local
+2025-07-22 23:24:31,001 - INFO - Executing: crypto key generate rsa general-keys modulus 1024
+2025-07-22 23:24:37,811 - INFO - RSA key generation output: 
+Baraton(config)#crypto key generate rsa general-keys modulus 1024
+% You already have RSA keys defined named Baraton.automation.local.
+% They will be replaced.
+
+% The key modulus size is 1024 bits
+% Generating 1024 bit RSA keys, keys will be non-exportable...
+*Mar  1 00:42:44.919: %SYS-5-CONFIG_I: Configured from console by console
+*Mar  1 00:42:45.315: %SSH-5-DISABLED: SSH 2.0 has been disabled[OK]
+
+Baraton(config)#
+*Mar  1 00:42:46.083: %SSH-5-ENABLED: SSH 2.0 has been enabled
+2025-07-22 23:24:37,814 - INFO - Executing: username admin privilege 15 secret password123
+2025-07-22 23:24:38,112 - INFO - Executing: enable secret password123
+2025-07-22 23:24:38,565 - INFO - Executing: ip ssh version 2
+2025-07-22 23:24:38,890 - INFO - Executing: ip ssh time-out 60
+2025-07-22 23:24:39,210 - INFO - Executing: ip ssh authentication-retries 3
+2025-07-22 23:24:39,519 - INFO - Executing: line vty 0 4
+2025-07-22 23:24:39,691 - INFO - Executing: transport input ssh
+2025-07-22 23:24:40,567 - INFO - Executing: login local
+2025-07-22 23:24:41,377 - INFO - Executing: exit
+2025-07-22 23:24:45,999 - INFO - Configuration saved: Building configuration...
+[OK]
+2025-07-22 23:24:47,233 - INFO - Interface status:
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            192.168.1.1     YES NVRAM  up                    up      
+FastEthernet0/1            192.168.2.2     YES NVRAM  up                    up      
+2025-07-22 23:24:52,177 - INFO - Found management IP: 192.168.1.1
+2025-07-22 23:24:52,210 - INFO - Testing SSH connection to 192.168.1.1...
+2025-07-22 23:25:02,224 - ERROR - SSH test failed for 192.168.1.1: TCP connection to device failed.
+
+Common causes of this problem are:
+1. Incorrect hostname or IP address.
+2. Wrong TCP port.
+3. Intermediate firewall blocking access.
+
+Device settings: cisco_ios 192.168.1.1:22
+
+
+2025-07-22 23:25:02,226 - INFO - Connecting to R2 via console...
+2025-07-22 23:25:09,086 - INFO - Connected to library - configuring SSH...
+2025-07-22 23:25:09,277 - INFO - Executing: hostname library
+2025-07-22 23:25:09,477 - INFO - Executing: ip domain-name automation.local
+2025-07-22 23:25:09,816 - INFO - Executing: crypto key generate rsa general-keys modulus 1024
+2025-07-22 23:25:14,626 - INFO - RSA key generation output: 
+library(config)#crypto key generate rsa general-keys modulus 1024
+% You already have RSA keys defined named library.automation.local.
+% They will be replaced.
+
+% The key modulus size is 1024 bits
+% Generating 1024 bit RSA keys, keys will be non-exportable...[OK]
+
+library(config)#
+*Mar  1 00:33:12.919: %SYS-5-CONFIG_I: Configured from console by console
+*Mar  1 00:33:13.323: %SSH-5-DISABLED: SSH 1.99 has been disabled
+library(config)#
+*Mar  1 00:33:14.123: %SSH-5-ENABLED: SSH 1.99 has been enabled
+2025-07-22 23:25:14,627 - INFO - Executing: username admin privilege 15 secret password123
+2025-07-22 23:25:14,866 - INFO - Executing: enable secret password123
+2025-07-22 23:25:15,305 - INFO - Executing: ip ssh version 2
+2025-07-22 23:25:15,627 - INFO - Executing: ip ssh time-out 60
+2025-07-22 23:25:15,954 - INFO - Executing: ip ssh authentication-retries 3
+2025-07-22 23:25:16,264 - INFO - Executing: line vty 0 4
+2025-07-22 23:25:16,866 - INFO - Executing: transport input ssh
+2025-07-22 23:25:17,710 - INFO - Executing: login local
+2025-07-22 23:25:18,193 - INFO - Executing: exit
+2025-07-22 23:25:20,092 - INFO - Configuration saved: Building configuration...
+
+*Mar  1 00:33:20.783: %SYS-5-CONFIG_I: Configured from console by console
+*Mar  1 00:33:21.619: %SYS-5-CONFIG_I: Configured from console by console[OK]
+2025-07-22 23:25:31,157 - ERROR - Failed to configure SSH on R2: 
+Pattern not detected: '\\*Mar\\ \\ 1\\ 00:33:21\\.907:\\ %SYS\\-5\\-CONFIG_I:\\ Configured\\ from\\ console' in output.
+
+Things you might try to fix this:
+1. Explicitly set your pattern using the expect_string argument.
+2. Increase the read_timeout to a larger value.
+
+You can also look at the Netmiko session_log or debug log for more information.
+
+
+2025-07-22 23:28:12,462 - INFO - Connecting to GNS3 server...
+2025-07-22 23:28:12,469 - INFO - Found project: Solange
+2025-07-22 23:28:12,477 - INFO - Found 7 nodes in project
+2025-07-22 23:28:12,477 - INFO - Found router: R1 accessible via localhost:5000 (console)
+2025-07-22 23:28:12,477 - INFO - Skipping Switch1 - ethernet_switch (started)
+2025-07-22 23:28:12,477 - INFO - Skipping PC1 - vpcs (started)
+2025-07-22 23:28:12,478 - INFO - Skipping PC2 - vpcs (started)
+2025-07-22 23:28:12,478 - INFO - Skipping PC3 - vpcs (started)
+2025-07-22 23:28:12,478 - INFO - Found router: R2 accessible via localhost:5008 (console)
+2025-07-22 23:28:12,478 - INFO - Skipping PC4 - vpcs (started)
+2025-07-22 23:28:12,479 - INFO - Found 2 active router devices in Solange project:
+2025-07-22 23:28:12,479 - INFO -   - R1: localhost:5000 (console)
+2025-07-22 23:28:12,479 - INFO -   - R2: localhost:5008 (console)
+2025-07-22 23:28:12,479 - INFO - 
+=== Configuring SSH on R1 ===
+2025-07-22 23:28:12,480 - INFO - Connecting to R1 via console (localhost:5000)...
+2025-07-22 23:28:17,506 - INFO - Successfully connected to R1 console
+2025-07-22 23:28:30,268 - ERROR - Failed to configure SSH on R1: 
+Pattern not detected: 'Baraton\\#' in output.
+
+Things you might try to fix this:
+1. Explicitly set your pattern using the expect_string argument.
+2. Increase the read_timeout to a larger value.
+
+You can also look at the Netmiko session_log or debug log for more information.
+
+
+2025-07-22 23:28:30,381 - INFO - 
+=== Configuring SSH on R2 ===
+2025-07-22 23:28:30,381 - INFO - Connecting to R2 via console (localhost:5008)...
+2025-07-22 23:28:35,427 - INFO - Successfully connected to R2 console
+2025-07-22 23:28:48,145 - ERROR - Failed to configure SSH on R2: 
+Pattern not detected: 'library\\#' in output.
+
+Things you might try to fix this:
+1. Explicitly set your pattern using the expect_string argument.
+2. Increase the read_timeout to a larger value.
+
+You can also look at the Netmiko session_log or debug log for more information.
+
+
+2025-07-22 23:28:48,150 - ERROR - Failed to configure SSH on any devices
+2025-07-29 12:16:41,602 - INFO - Connecting to R1 via console...
+2025-07-29 12:16:43,888 - ERROR - Failed to configure SSH on R1: [WinError 10061] No connection could be made because the target machine actively refused it
+2025-07-29 12:16:43,890 - INFO - Connecting to R2 via console...
+2025-07-29 12:17:04,937 - ERROR - Failed to configure SSH on R2: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+2025-07-29 12:19:02,839 - INFO - Connecting to R1 via console...
+2025-07-29 12:19:18,416 - ERROR - Failed to configure SSH on R1: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+2025-07-29 12:19:18,417 - INFO - Connecting to R2 via console...
+2025-07-29 12:19:32,515 - ERROR - Failed to configure SSH on R2: [WinError 10053] An established connection was aborted by the software in your host machine
+2025-07-29 12:25:34,323 - INFO - Connecting to R1 via console...
+2025-07-29 12:25:36,382 - ERROR - Failed to configure SSH on R1: [WinError 10061] No connection could be made because the target machine actively refused it
+2025-07-29 12:25:36,384 - INFO - Connecting to R2 via console...
+2025-07-29 12:25:57,446 - ERROR - Failed to configure SSH on R2: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond
+2025-07-29 12:30:44,968 - INFO - Using hardcoded console configuration for GNS3 routers
+2025-07-29 12:30:44,970 - INFO - Connecting to R1 via console 127.0.0.1:5000...
+2025-07-29 12:30:51,113 - INFO - Connected to Baraton - configuring SSH...
+2025-07-29 12:30:51,114 - INFO - Setting up basic network configuration...
+2025-07-29 12:30:51,114 - INFO - Executing: configure terminal
+2025-07-29 12:30:54,418 - INFO - Executing: hostname Baraton
+2025-07-29 12:30:57,621 - INFO - Executing: ip domain-name automation.local
+2025-07-29 12:31:00,823 - INFO - Executing: interface fastethernet0/0
+2025-07-29 12:31:04,028 - INFO - Executing: ip address 192.168.1.1 255.255.255.0
+2025-07-29 12:31:07,333 - INFO - Executing: no shutdown
+2025-07-29 12:31:10,539 - INFO - Executing: exit
+2025-07-29 12:31:13,743 - INFO - Generating RSA keys...
+2025-07-29 12:31:18,851 - INFO - RSA key generation output: % You already have RSA keys defined named Baraton.automation.local.
+% They will be replaced.
+
+% The key modulus size is 1024 bits
+% Generating 1024 bit RSA keys, keys will be non-exportable...
+*Mar  1 00:05:26.323: %SSH-5-DISABLED: SSH 2.0 has been disabled[OK]
+
+Baraton(config)#
+*Mar  1 00:05:28.883: %SSH-5-ENABLED: SSH 2.0 has been enabled
+2025-07-29 12:31:18,851 - INFO - Executing: username admin privilege 15 secret cisco123
+2025-07-29 12:31:22,055 - INFO - Executing: enable secret enable123
+2025-07-29 12:31:25,260 - INFO - Executing: ip ssh version 2
+2025-07-29 12:31:28,465 - INFO - Executing: ip ssh time-out 60
+2025-07-29 12:31:31,668 - INFO - Executing: ip ssh authentication-retries 3
+2025-07-29 12:31:34,872 - INFO - Executing: line vty 0 4
+2025-07-29 12:31:38,077 - INFO - Executing: transport input ssh
+2025-07-29 12:31:41,280 - INFO - Executing: login local
+2025-07-29 12:31:44,484 - INFO - Executing: exit
+2025-07-29 12:31:47,687 - INFO - Executing: exit
+2025-07-29 12:32:03,647 - ERROR - Failed to configure SSH on R1: 
+
+Pattern not detected: 'write\\ memory' in output.
+
+Things you might try to fix this:
+1. Adjust the regex pattern to better identify the terminating string. Note, in
+many situations the pattern is automatically based on the network device's prompt.
+2. Increase the read_timeout to a larger value.
+
+You can also look at the Netmiko session_log or debug log for more information.
+
+
+2025-07-29 12:32:03,648 - INFO - Connecting to R2 via console 127.0.0.1:5008...
+2025-07-29 12:32:09,803 - INFO - Connected to library - configuring SSH...
+2025-07-29 12:32:09,804 - INFO - Setting up basic network configuration...
+2025-07-29 12:32:09,804 - INFO - Executing: configure terminal
+2025-07-29 12:32:13,107 - INFO - Executing: hostname library
+2025-07-29 12:32:16,311 - INFO - Executing: ip domain-name automation.local
+2025-07-29 12:32:19,515 - INFO - Executing: interface fastethernet0/0
+2025-07-29 12:32:22,718 - INFO - Executing: ip address 192.168.1.2 255.255.255.0
+2025-07-29 12:32:26,022 - INFO - Executing: no shutdown
+2025-07-29 12:32:29,326 - INFO - Executing: exit
+2025-07-29 12:32:32,559 - INFO - Generating RSA keys...
+2025-07-29 12:32:37,467 - INFO - RSA key generation output: % You already have RSA keys defined named library.automation.local.
+% They will be replaced.
+
+% The key modulus size is 1024 bits
+% Generating 1024 bit RSA keys, keys will be non-exportable...
+*Mar  1 00:06:05.747: %SSH-5-DISABLED: SSH 2.0 has been disabled[OK]
+
+library(config)#
+*Mar  1 00:06:08.055: %SSH-5-ENABLED: SSH 2.0 has been enabled
+2025-07-29 12:32:37,467 - INFO - Executing: username admin privilege 15 secret cisco123
+2025-07-29 12:32:40,672 - INFO - Executing: enable secret enable123
+2025-07-29 12:32:43,875 - INFO - Executing: ip ssh version 2
+2025-07-29 12:32:47,079 - INFO - Executing: ip ssh time-out 60
+2025-07-29 12:32:50,283 - INFO - Executing: ip ssh authentication-retries 3
+2025-07-29 12:32:53,486 - INFO - Executing: line vty 0 4
+2025-07-29 12:32:56,691 - INFO - Executing: transport input ssh
+2025-07-29 12:32:59,894 - INFO - Executing: login local
+2025-07-29 12:33:03,098 - INFO - Executing: exit
+2025-07-29 12:33:06,302 - INFO - Executing: exit
+2025-07-29 12:33:13,270 - INFO - Configuration saved: Building configuration...
+[OK]
+2025-07-29 12:33:14,501 - INFO - Interface status:
+Interface                  IP-Address      OK? Method Status                Protocol
+FastEthernet0/0            192.168.1.2     YES manual up                    up      
+FastEthernet0/1            unassigned      YES NVRAM  administratively down down    
+2025-07-29 12:33:19,516 - INFO - Testing SSH connection to 192.168.1.2...
+2025-07-29 12:33:29,529 - ERROR - SSH test failed for 192.168.1.2: TCP connection to device failed.
+
+Common causes of this problem are:
+1. Incorrect hostname or IP address.
+2. Wrong TCP port.
+3. Intermediate firewall blocking access.
+
+Device settings: cisco_ios 192.168.1.2:22
+
+

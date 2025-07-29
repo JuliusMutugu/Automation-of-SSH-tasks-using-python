@@ -1,0 +1,119 @@
+Using 1303 out of 57336 bytes
+!
+version 12.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname Baraton
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 5 $1$CMBr$JyO1FBx71mo8p94su9OoF.
+!
+no aaa new-model
+memory-size iomem 5
+no ip icmp rate-limit unreachable
+ip cef
+!
+!
+no ip dhcp use vrf connected
+!
+ip dhcp pool pool1
+   network 192.168.1.0 255.255.255.0
+
+   default-router 192.168.1.1 
+   dns-server 8.8.8.8 
+   domain-name wr
+!
+!
+no ip domain lookup
+ip domain name automation.local
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+username admin privilege 15 secret 5 $1$peH9$479la1F8PUc/PpUapOQbB1
+archive
+ log config
+  hidekeys
+! 
+!
+!
+!
+ip tcp synwait-time 5
+
+ip ssh time-out 60
+ip ssh version 2
+!
+!
+!
+!
+interface FastEthernet0/0
+ ip address 192.168.1.10 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/1
+ ip address 192.168.2.2 255.255.255.0
+ duplex auto
+ speed auto
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+no cdp log mismatch duplex
+!
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+line vty 0 5
+ login local
+ transport input ssh
+!
+!
+end

@@ -73,7 +73,7 @@ def discover_devices():
                 operation_manager.add_log('Starting device discovery...')
                 
                 # Change to the correct directory and run the script
-                script_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'connectionGNS3', 'enable.py')
+                script_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'connectionGNS3', 'enable_new.py')
                 
                 result = subprocess.run(
                     [sys.executable, script_path],
