@@ -35,10 +35,18 @@ try:
         db_integration, init_database_integration, 
         get_devices_hybrid, log_operation_hybrid
     )
+    from database.user_manager import UserManager
+    from database.connection import DatabaseManager
     DATABASE_ENABLED = True
+    
+    # Initialize user manager
+    db_manager = DatabaseManager()
+    user_manager = UserManager(db_manager)
+    
 except ImportError as e:
     logger.warning(f"Database integration not available: {e}")
     DATABASE_ENABLED = False
+    user_manager = None
 
 app = Flask(__name__)
 app.secret_key = 'solange-network-automation-2025-secure-key'
@@ -72,11 +80,17 @@ def is_logged_in():
 def get_current_user():
     return session.get('user', None)
 
+def get_current_user_data():
+    return session.get('user_data', None)
+
 def has_permission(permission):
     if not is_logged_in():
         return False
-    user = get_current_user()
-    return permission in USER_ROLES.get(user, [])
+    user_data = get_current_user_data()
+    if not user_data:
+        return False
+    role = user_data.get('role', 'viewer')
+    return permission in USER_ROLES.get(role, [])
 
 def require_auth(f):
     """Decorator to require authentication"""
@@ -146,17 +160,39 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
         
-        if username in USERS and check_password_hash(USERS[username], password):
-            session['user'] = username
-            session['logged_in'] = True
-            session['login_time'] = datetime.now().isoformat()
-            session.permanent = True
-            
-            flash(f'Welcome, {username}!', 'success')
-            next_page = request.args.get('next')
-            return redirect(next_page or url_for('index'))
+        if not username or not password:
+            flash('Please enter both username and password.', 'error')
+            return render_template('login.html')
+        
+        # Use database authentication if available
+        if DATABASE_ENABLED and user_manager:
+            try:
+                auth_result = user_manager.authenticate_user(
+                    username, 
+                    password, 
+                    request.remote_addr
+                )
+                
+                if auth_result['success']:
+                    user_data = auth_result['user']
+                    session['user'] = user_data['username']
+                    session['user_data'] = user_data
+                    session['logged_in'] = True
+                    session['login_time'] = datetime.now().isoformat()
+                    session['session_token'] = auth_result['session_token']
+                    session.permanent = True
+                    
+                    flash(f'Welcome, {user_data["username"]}!', 'success')
+                    next_page = request.args.get('next')
+                    return redirect(next_page or url_for('index'))
+                else:
+                    flash(auth_result['message'], 'error')
+            except Exception as e:
+                logger.error(f"Database authentication error: {e}")
+                flash('Authentication service unavailable. Please try again.', 'error')
         else:
-            flash('Invalid username or password.', 'error')
+            # Fallback authentication (for development)
+            flash('Database authentication not available. Please contact administrator.', 'error')
     
     return render_template('login.html')
 
@@ -164,17 +200,93 @@ def login():
 def logout():
     """Logout and clear session"""
     user = session.get('user', 'Unknown')
+    session_token = session.get('session_token')
+    
+    # Invalidate database session if available
+    if DATABASE_ENABLED and user_manager and session_token:
+        try:
+            user_manager.invalidate_session(session_token)
+        except Exception as e:
+            logger.error(f"Error invalidating session: {e}")
+    
     session.clear()
     flash(f'Goodbye, {user}!', 'info')
     return redirect(url_for('login'))
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    """User registration page"""
+    # Check if registration is enabled
+    registration_enabled = False
+    password_min_length = 8
+    password_require_special = True
+    
+    if DATABASE_ENABLED and user_manager:
+        try:
+            registration_enabled = user_manager.get_setting('user_registration_enabled', False)
+            password_min_length = user_manager.get_setting('password_min_length', 8)
+            password_require_special = user_manager.get_setting('password_require_special', True)
+        except Exception as e:
+            logger.error(f"Error getting registration settings: {e}")
+    
+    if request.method == 'POST' and registration_enabled:
+        username = request.form.get('username', '').strip()
+        email = request.form.get('email', '').strip()
+        password = request.form.get('password', '')
+        confirm_password = request.form.get('confirm_password', '')
+        full_name = request.form.get('full_name', '').strip()
+        
+        # Basic validation
+        if not username or not email or not password:
+            flash('Username, email, and password are required.', 'error')
+            return render_template('register.html', 
+                                 registration_enabled=registration_enabled,
+                                 password_min_length=password_min_length,
+                                 password_require_special=password_require_special)
+        
+        if password != confirm_password:
+            flash('Passwords do not match.', 'error')
+            return render_template('register.html', 
+                                 registration_enabled=registration_enabled,
+                                 password_min_length=password_min_length,
+                                 password_require_special=password_require_special)
+        
+        # Create user
+        if DATABASE_ENABLED and user_manager:
+            try:
+                result = user_manager.create_user(
+                    username=username,
+                    email=email,
+                    password=password,
+                    full_name=full_name or None,
+                    role='viewer'  # Default role for new registrations
+                )
+                
+                if result['success']:
+                    flash('Account created successfully! You can now log in.', 'success')
+                    return redirect(url_for('login'))
+                else:
+                    flash(result['message'], 'error')
+            except Exception as e:
+                logger.error(f"Registration error: {e}")
+                flash('Registration failed. Please try again.', 'error')
+        else:
+            flash('Registration service unavailable.', 'error')
+    
+    return render_template('register.html', 
+                         registration_enabled=registration_enabled,
+                         password_min_length=password_min_length,
+                         password_require_special=password_require_special)
 
 @app.route('/')
 @require_auth
 def index():
     """Serve the main web interface"""
     user = get_current_user()
-    user_permissions = USER_ROLES.get(user, [])
-    return render_template('index.html', user=user, permissions=user_permissions)
+    user_data = get_current_user_data()
+    user_role = user_data.get('role', 'viewer') if user_data else 'viewer'
+    user_permissions = USER_ROLES.get(user_role, [])
+    return render_template('index.html', user=user, permissions=user_permissions, user_data=user_data)
 
 @app.route('/api/devices/discover', methods=['POST'])
 @require_permission('write')

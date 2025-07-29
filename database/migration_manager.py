@@ -100,7 +100,8 @@ class MigrationManager:
             return []
     
     def execute_migration_file(self, migration_file):
-        """Execute a single migration file"""
+        """Execute a single migration file with proper transaction handling"""
+        connection = None
         try:
             file_path = os.path.join(self.migrations_dir, migration_file)
             
@@ -113,19 +114,36 @@ class MigrationManager:
             connection = self.db_connection.get_connection()
             cursor = connection.cursor()
             
-            for statement in statements:
-                if statement:
-                    cursor.execute(statement)
+            # Disable autocommit for transaction control
+            connection.autocommit = False
             
-            cursor.close()
-            connection.close()
-            
-            self.logger.info(f"Migration {migration_file} executed successfully")
-            return True
+            try:
+                # Execute all statements in a transaction
+                for statement in statements:
+                    if statement:
+                        cursor.execute(statement)
+                
+                # Commit all changes
+                connection.commit()
+                self.logger.info(f"Migration {migration_file} executed successfully")
+                return True
+                
+            except Exception as e:
+                # Rollback on any error
+                connection.rollback()
+                self.logger.error(f"Error executing migration {migration_file}: {e}")
+                return False
+            finally:
+                # Re-enable autocommit
+                connection.autocommit = True
+                cursor.close()
             
         except Exception as e:
-            self.logger.error(f"Error executing migration {migration_file}: {e}")
+            self.logger.error(f"Error opening migration file {migration_file}: {e}")
             return False
+        finally:
+            if connection:
+                connection.close()
     
     def run_migrations(self):
         """Run all pending migrations"""

@@ -7,11 +7,16 @@ from mysql.connector import Error
 import logging
 from datetime import datetime
 import json
+from dotenv import load_dotenv
 
 class DatabaseConfig:
     """Database configuration management"""
     
     def __init__(self):
+        # Load environment variables from .env file
+        env_path = os.path.join(os.path.dirname(__file__), '.env')
+        load_dotenv(env_path)
+        
         # Default configuration - can be overridden by environment variables
         self.host = os.getenv('DB_HOST', 'localhost')
         self.port = int(os.getenv('DB_PORT', 3306))

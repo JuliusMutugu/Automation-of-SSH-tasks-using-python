@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solange Network Automation - Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .register-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e1e5e9;
+        }
+        
+        .register-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .register-header h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+        
+        .register-header p {
+            color: #7f8c8d;
+            margin: 0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .register-btn {
+            width: 100%;
+            padding: 12px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 15px;
+        }
+        
+        .register-btn:hover {
+            background: #219a52;
+        }
+        
+        .register-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .register-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .alert {
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid transparent;
+        }
+        
+        .alert-error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        
+        .alert-info {
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+            color: #0c5460;
+        }
+        
+        .password-requirements {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        
+        .password-requirements h5 {
+            margin: 0 0 10px 0;
+            color: #495057;
+        }
+        
+        .requirement {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+            color: #6c757d;
+        }
+        
+        .requirement.valid {
+            color: #28a745;
+        }
+        
+        .requirement.invalid {
+            color: #dc3545;
+        }
+        
+        .requirement i {
+            width: 16px;
+            margin-right: 8px;
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .login-link a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-header">
+            <h1>🌐 Join Solange Network Automation</h1>
+            <p>Create your account to get started</p>
+        </div>
+        
+        {% if not registration_enabled %}
+            <div class="alert alert-info">
+                <strong>Registration Disabled</strong><br>
+                User registration is currently disabled. Please contact your administrator.
+            </div>
+            <div class="login-link">
+                <p>Already have an account? <a href="{{ url_for('login') }}">Sign in here</a></p>
+            </div>
+        {% else %}
+            <!-- Flash messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ 'error' if category == 'error' else category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <form method="POST" id="registerForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="username">Username *</label>
+                        <input type="text" id="username" name="username" required autocomplete="username" 
+                               value="{{ request.form.username if request.form.username else '' }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" required autocomplete="email"
+                               value="{{ request.form.email if request.form.email else '' }}">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="full_name">Full Name</label>
+                    <input type="text" id="full_name" name="full_name" autocomplete="name"
+                           value="{{ request.form.full_name if request.form.full_name else '' }}">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password *</label>
+                    <input type="password" id="password" name="password" required autocomplete="new-password">
+                    
+                    <div class="password-requirements">
+                        <h5>Password Requirements:</h5>
+                        <div class="requirement" id="req-length">
+                            <i class="fas fa-times"></i>
+                            At least {{ password_min_length }} characters long
+                        </div>
+                        <div class="requirement" id="req-uppercase">
+                            <i class="fas fa-times"></i>
+                            Contains uppercase letter
+                        </div>
+                        <div class="requirement" id="req-lowercase">
+                            <i class="fas fa-times"></i>
+                            Contains lowercase letter
+                        </div>
+                        <div class="requirement" id="req-number">
+                            <i class="fas fa-times"></i>
+                            Contains number
+                        </div>
+                        {% if password_require_special %}
+                        <div class="requirement" id="req-special">
+                            <i class="fas fa-times"></i>
+                            Contains special character
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password *</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required autocomplete="new-password">
+                </div>
+                
+                <button type="submit" class="register-btn" id="registerBtn">Create Account</button>
+            </form>
+            
+            <div class="login-link">
+                <p>Already have an account? <a href="{{ url_for('login') }}">Sign in here</a></p>
+            </div>
+        {% endif %}
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <script>
+        // Auto-focus on username field
+        {% if registration_enabled %}
+        document.getElementById('username').focus();
+        {% endif %}
+        
+        // Password validation
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirm_password');
+        const registerBtn = document.getElementById('registerBtn');
+        
+        const requirements = {
+            length: { element: document.getElementById('req-length'), regex: /.{{{ password_min_length }},}/ },
+            uppercase: { element: document.getElementById('req-uppercase'), regex: /[A-Z]/ },
+            lowercase: { element: document.getElementById('req-lowercase'), regex: /[a-z]/ },
+            number: { element: document.getElementById('req-number'), regex: /\d/ },
+            {% if password_require_special %}
+            special: { element: document.getElementById('req-special'), regex: /[!@#$%^&*(),.?":{}|<>]/ }
+            {% endif %}
+        };
+        
+        function validatePassword() {
+            const password = passwordInput.value;
+            let allValid = true;
+            
+            Object.keys(requirements).forEach(key => {
+                const req = requirements[key];
+                const isValid = req.regex.test(password);
+                
+                if (isValid) {
+                    req.element.classList.remove('invalid');
+                    req.element.classList.add('valid');
+                    req.element.querySelector('i').className = 'fas fa-check';
+                } else {
+                    req.element.classList.remove('valid');
+                    req.element.classList.add('invalid');
+                    req.element.querySelector('i').className = 'fas fa-times';
+                    allValid = false;
+                }
+            });
+            
+            return allValid;
+        }
+        
+        function validateForm() {
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            const passwordValid = validatePassword();
+            const passwordsMatch = password === confirmPassword;
+            
+            if (passwordValid && passwordsMatch && password.length > 0) {
+                registerBtn.disabled = false;
+            } else {
+                registerBtn.disabled = true;
+            }
+        }
+        
+        {% if registration_enabled %}
+        passwordInput.addEventListener('input', validateForm);
+        confirmPasswordInput.addEventListener('input', validateForm);
+        
+        // Form submission
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            
+            if (!username || !email || !password) {
+                e.preventDefault();
+                alert('Please fill in all required fields.');
+                return false;
+            }
+            
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                alert('Passwords do not match.');
+                return false;
+            }
+            
+            if (!validatePassword()) {
+                e.preventDefault();
+                alert('Password does not meet requirements.');
+                return false;
+            }
+        });
+        
+        // Initial validation
+        validateForm();
+        {% endif %}
+    </script>
+</body>
+</html>

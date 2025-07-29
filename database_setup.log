@@ -1,0 +1,38 @@
+2025-07-29 17:45:42,449 - database.connection - ERROR - Error creating database: 1045 (28000): Access denied for user 'root'@'localhost' (using password: NO)
+2025-07-29 17:45:42,457 - database.connection - ERROR - Error creating connection pool: 1045 (28000): Access denied for user 'root'@'localhost' (using password: NO)
+2025-07-29 17:47:17,289 - database.connection - INFO - Database 'ssh_automation' created or already exists
+2025-07-29 17:47:17,337 - database.connection - INFO - Connection pool created successfully with 5 connections
+2025-07-29 17:47:17,344 - __main__ - INFO - Database connection initialized
+2025-07-29 17:47:17,346 - database.migration_manager - INFO - Starting database migrations...
+2025-07-29 17:47:17,389 - database.connection - INFO - Database 'ssh_automation' created or already exists
+2025-07-29 17:47:17,433 - database.connection - INFO - Connection pool created successfully with 5 connections
+2025-07-29 17:47:17,456 - database.migration_manager - INFO - Migration tracking table created successfully
+2025-07-29 17:47:17,459 - database.migration_manager - INFO - Executing migration: 003_insert_default_users.sql
+2025-07-29 17:47:17,463 - database.migration_manager - ERROR - Error executing migration 003_insert_default_users.sql: 1146 (42S02): Table 'ssh_automation.users' doesn't exist
+2025-07-29 17:49:21,366 - database.connection - INFO - Database 'ssh_automation' created or already exists
+2025-07-29 17:49:21,416 - database.connection - INFO - Connection pool created successfully with 5 connections
+2025-07-29 17:49:21,426 - __main__ - INFO - Database connection initialized
+2025-07-29 17:49:21,483 - database.connection - INFO - Database 'ssh_automation' created or already exists
+2025-07-29 17:49:21,538 - database.connection - INFO - Connection pool created successfully with 5 connections
+2025-07-29 17:49:21,543 - database.migration_manager - INFO - Starting database migrations...
+2025-07-29 17:49:21,606 - database.migration_manager - INFO - Migration tracking table created successfully
+2025-07-29 17:49:21,610 - database.migration_manager - INFO - Executing migration: 003_insert_default_users.sql
+2025-07-29 17:49:21,694 - database.migration_manager - ERROR - Error executing migration 003_insert_default_users.sql: 1146 (42S02): Table 'ssh_automation.users' doesn't exist
+2025-07-29 17:52:26,228 - database.connection - INFO - Database 'ssh_automation' created or already exists
+2025-07-29 17:52:26,277 - database.connection - INFO - Connection pool created successfully with 5 connections
+2025-07-29 17:52:26,282 - __main__ - INFO - Database connection initialized
+2025-07-29 17:52:26,317 - database.connection - INFO - Database 'ssh_automation' created or already exists
+2025-07-29 17:52:26,364 - database.connection - INFO - Connection pool created successfully with 5 connections
+2025-07-29 17:52:26,367 - database.migration_manager - ERROR - Error getting executed migrations: 1146 (42S02): Table 'ssh_automation.migrations' doesn't exist
+2025-07-29 17:52:26,369 - database.migration_manager - INFO - Starting database migrations...
+2025-07-29 17:52:26,829 - database.migration_manager - INFO - Migration tracking table created successfully
+2025-07-29 17:52:26,837 - database.migration_manager - INFO - Executing migration: 001_create_initial_tables.sql
+2025-07-29 17:52:33,341 - database.migration_manager - INFO - Migration 001_create_initial_tables.sql executed successfully
+2025-07-29 17:52:33,425 - database.migration_manager - INFO - Migration 001_create_initial_tables.sql marked as executed
+2025-07-29 17:52:33,426 - database.migration_manager - INFO - Executing migration: 002_insert_default_settings.sql
+2025-07-29 17:52:33,668 - database.migration_manager - INFO - Migration 002_insert_default_settings.sql executed successfully
+2025-07-29 17:52:33,746 - database.migration_manager - INFO - Migration 002_insert_default_settings.sql marked as executed
+2025-07-29 17:52:33,747 - database.migration_manager - INFO - Executing migration: 003_insert_default_users.sql
+2025-07-29 17:52:34,088 - database.migration_manager - INFO - Migration 003_insert_default_users.sql executed successfully
+2025-07-29 17:52:34,134 - database.migration_manager - INFO - Migration 003_insert_default_users.sql marked as executed
+2025-07-29 17:52:34,134 - database.migration_manager - INFO - Successfully executed 3 migrations

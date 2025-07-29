@@ -16,3 +16,12 @@
 2025-07-29 17:04:30,467 - database.connection - INFO - Connection pool created successfully with 5 connections
 2025-07-29 17:04:30,470 - database.connection - INFO - Database connection test successful
 2025-07-29 17:04:30,474 - database.connection - ERROR - Database query error: Unread result found
+2025-07-29 17:40:06,210 - database.connection - INFO - Initializing database...
+2025-07-29 17:40:06,288 - database.connection - INFO - Database 'ssh_automation' created or already exists
+2025-07-29 17:40:06,330 - database.connection - INFO - Connection pool created successfully with 5 connections
+2025-07-29 17:40:06,334 - database.connection - INFO - Database connection test successful
+2025-07-29 17:40:06,342 - database.migration_manager - INFO - Starting database migrations...
+2025-07-29 17:40:06,361 - database.migration_manager - INFO - Migration tracking table created successfully
+2025-07-29 17:40:06,365 - database.migration_manager - INFO - Executing migration: 003_insert_default_users.sql
+2025-07-29 17:40:06,373 - database.migration_manager - ERROR - Error executing migration 003_insert_default_users.sql: 1146 (42S02): Table 'ssh_automation.users' doesn't exist
+2025-07-29 17:40:06,373 - database.connection - ERROR - Migration failed
