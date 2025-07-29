@@ -1,32 +1,3 @@
-# Sample bulk configuration commands for Cisco devices
-# Lines starting with # are comments and will be ignored
-
-# Configure loopback interface
-interface loopback 0
-ip address 192.168.100.1 255.255.255.255
-no shutdown
-exit
-
-# Configure OSPF
 router ospf 1
-network 192.168.100.0 0.0.0.255 area 0
+network 192.168.1.0 0.0.0.255 area 0
 exit
-
-# Configure SNMP
-snmp-server community public ro
-snmp-server location "GNS3 Lab - Solange Project"
-snmp-server contact "Network Administrator"
-
-# Configure logging
-logging buffered 16384
-logging console warnings
-logging monitor warnings
-
-# Configure NTP (example)
-# ntp server 192.168.1.1
-
-# Configure banner
-banner motd ^
-Welcome to Solange Project Network Device
-Authorized access only!
-^

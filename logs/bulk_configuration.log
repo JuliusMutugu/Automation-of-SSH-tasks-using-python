@@ -124,3 +124,26 @@ de...
 [OK]
 2025-07-29 15:05:20,272 - INFO - Configuration applied to R2 (deciRouter) successfully.
 2025-07-29 15:05:22,294 - INFO - Bulk configuration completed: 2/2 devices successful
+2025-07-29 15:57:49,102 - INFO - Starting bulk configuration process...
+2025-07-29 15:57:49,102 - INFO - Loading device config from: C:\Users\Julimore\Documents\SolangeFinalPresentation\Automation-of-SSH-tasks-using-python\config\devices_config.yaml
+2025-07-29 15:57:49,104 - INFO - Loaded config: {'devices': [{'device_type': 'cisco_ios_telnet', 'fast_cli': False, 'global_delay_factor': 2, 'host': '127.0.0.1', 'last_tested': '2025-07-29T15:56:15.412741', 'management_ip': '192.168.1.10', 'name': 'R1', 'password': '', 'port': 5000, 'real_hostname': 'Baraton', 'secret': '', 'timeout': 30, 'username': ''}, {'device_type': 'cisco_ios_telnet', 'fast_cli': False, 'global_delay_factor': 2, 'host': '127.0.0.1', 'last_tested': '2025-07-29T15:56:24.071110', 'management_ip': '192.168.1.20', 'name': 'R2', 'password': '', 'port': 5008, 'real_hostname': 'deciRouter', 'secret': '', 'timeout': 30, 'username': ''}]}
+2025-07-29 15:57:49,104 - INFO - Loaded 3 configuration commands
+2025-07-29 15:57:49,104 - INFO - Starting bulk configuration of 2 devices...
+2025-07-29 15:57:49,104 - INFO - Commands to apply: 3
+2025-07-29 15:57:49,104 - INFO - Connecting to R1 (127.0.0.1:5000) via console
+2025-07-29 15:57:53,110 - INFO - Connected to R1 - Baraton via console
+2025-07-29 15:57:53,111 - INFO - Applying 3 commands to R1
+2025-07-29 15:57:53,610 - INFO - Configuration output for R1: configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+Baraton(confi
+Baraton(config)#router ospf 1
+Baraton(config-router)#network 192.168.1.0 0.0.0.255 area 0
+Baraton(config-...
+2025-07-29 15:57:55,496 - INFO - Save result for R1: Building configuration...
+[OK]
+2025-07-29 15:57:55,496 - INFO - Configuration applied to R1 (Baraton) successfully.
+2025-07-29 15:57:57,508 - INFO - Connecting to R2 (127.0.0.1:5008) via console
+2025-07-29 15:58:00,880 - INFO - Connected to R2 - deciRouter via console
+2025-07-29 15:58:00,881 - INFO - Applying 3 commands to R2
+2025-07-29 15:58:01,106 - ERROR - Failed to apply configuration to R2: Failed to enter configuration mode.
+2025-07-29 15:58:03,107 - INFO - Bulk configuration completed: 1/2 devices successful

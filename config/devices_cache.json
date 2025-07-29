@@ -10,21 +10,21 @@
     "console_port": 5000,
     "actual_connection": "console_telnet",
     "real_hostname": "Baraton",
-    "uptime": "Baraton uptime is 2 hours, 18 minutes",
-    "last_updated": "2025-07-29T15:38:20.295513"
+    "uptime": "Baraton uptime is 2 hours, 39 minutes",
+    "last_updated": "2025-07-29T15:59:30.732580"
   },
   {
     "name": "R2",
-    "host": "192.168.1.20",
-    "port": 22,
-    "device_type": "cisco_ios",
+    "host": null,
+    "port": 5008,
+    "device_type": "cisco_ios_telnet",
     "status": "online",
-    "connection_type": "ssh",
+    "connection_type": "console",
     "console_host": "127.0.0.1",
     "console_port": 5008,
     "actual_connection": "console_telnet",
-    "real_hostname": "deciRouter",
-    "uptime": "deciRouter uptime is 2 hours, 17 minutes",
-    "last_updated": "2025-07-29T15:38:28.950762"
+    "real_hostname": "R2",
+    "uptime": "^\n% Invalid input detected at '^' marker.",
+    "last_updated": "2025-07-29T15:59:38.437850"
   }
 ]
