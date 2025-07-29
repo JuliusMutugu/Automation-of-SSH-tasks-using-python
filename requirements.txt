@@ -7,3 +7,11 @@ pyyaml
 colorama
 flask
 flask-cors
+flask-session
+flask-login
+werkzeug
+reportlab
+weasyprint
+mysql-connector-python
+python-dotenv
+cryptography

@@ -1,28 +1,111 @@
 """
 Flask Web Server for Solange Network Automation Suite
-Provides a web-based GUI for network automation tasks
+Provides a web-based GUI for network automation tasks with authentication
 """
 
-from flask import Flask, render_template, request, jsonify, send_file
+from flask import Flask, render_template, request, jsonify, send_file, session, redirect, url_for, flash, make_response
+from flask_session import Session
 import subprocess
 import json
 import os
 import sys
 import threading
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 import yaml
 import logging
+from werkzeug.security import check_password_hash, generate_password_hash
+from reportlab.lib.pagesizes import letter, A4
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+from reportlab.lib import colors
+import io
+
+# Configure logging first
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Add parent directory to path for imports
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-app = Flask(__name__)
-app.secret_key = 'solange-network-automation-2025'
+# Import database integration
+try:
+    from database_integration import (
+        db_integration, init_database_integration, 
+        get_devices_hybrid, log_operation_hybrid
+    )
+    DATABASE_ENABLED = True
+except ImportError as e:
+    logger.warning(f"Database integration not available: {e}")
+    DATABASE_ENABLED = False
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+app = Flask(__name__)
+app.secret_key = 'solange-network-automation-2025-secure-key'
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_USE_SIGNER'] = True
+app.config['SESSION_KEY_PREFIX'] = 'solange:'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=8)
+
+# Initialize session
+Session(app)
+
+# Default users (in production, store in database)
+USERS = {
+    'admin': generate_password_hash('admin123'),
+    'operator': generate_password_hash('operator123'),
+    'viewer': generate_password_hash('viewer123')
+}
+
+# User roles
+USER_ROLES = {
+    'admin': ['read', 'write', 'delete', 'configure'],
+    'operator': ['read', 'write', 'configure'],
+    'viewer': ['read']
+}
+
+# Authentication helpers
+def is_logged_in():
+    return 'user' in session and 'logged_in' in session and session['logged_in']
+
+def get_current_user():
+    return session.get('user', None)
+
+def has_permission(permission):
+    if not is_logged_in():
+        return False
+    user = get_current_user()
+    return permission in USER_ROLES.get(user, [])
+
+def require_auth(f):
+    """Decorator to require authentication"""
+    def decorated_function(*args, **kwargs):
+        if not is_logged_in():
+            if request.is_json:
+                return jsonify({'error': 'Authentication required'}), 401
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    decorated_function.__name__ = f.__name__
+    return decorated_function
+
+def require_permission(permission):
+    """Decorator to require specific permission"""
+    def decorator(f):
+        def decorated_function(*args, **kwargs):
+            if not is_logged_in():
+                if request.is_json:
+                    return jsonify({'error': 'Authentication required'}), 401
+                return redirect(url_for('login'))
+            if not has_permission(permission):
+                if request.is_json:
+                    return jsonify({'error': 'Insufficient permissions'}), 403
+                flash('You do not have permission to perform this action.', 'error')
+                return redirect(url_for('index'))
+            return f(*args, **kwargs)
+        decorated_function.__name__ = f.__name__
+        return decorated_function
+    return decorator
 
 # Global variables for operation status
 current_operation = None
@@ -56,12 +139,45 @@ class OperationManager:
 
 operation_manager = OperationManager()
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    """Login page and authentication"""
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        if username in USERS and check_password_hash(USERS[username], password):
+            session['user'] = username
+            session['logged_in'] = True
+            session['login_time'] = datetime.now().isoformat()
+            session.permanent = True
+            
+            flash(f'Welcome, {username}!', 'success')
+            next_page = request.args.get('next')
+            return redirect(next_page or url_for('index'))
+        else:
+            flash('Invalid username or password.', 'error')
+    
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    """Logout and clear session"""
+    user = session.get('user', 'Unknown')
+    session.clear()
+    flash(f'Goodbye, {user}!', 'info')
+    return redirect(url_for('login'))
+
 @app.route('/')
+@require_auth
 def index():
     """Serve the main web interface"""
-    return render_template('index.html')
+    user = get_current_user()
+    user_permissions = USER_ROLES.get(user, [])
+    return render_template('index.html', user=user, permissions=user_permissions)
 
 @app.route('/api/devices/discover', methods=['POST'])
+@require_permission('write')
 def discover_devices():
     """Discover devices using the GNS3 connection script"""
     try:
@@ -114,6 +230,7 @@ def get_devices():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/api/backup/all', methods=['POST'])
+@require_permission('write')
 def backup_all_devices():
     """Backup all device configurations"""
     try:
@@ -314,6 +431,7 @@ def get_logs():
         return jsonify({'success': False, 'error': str(e)}), 500
 
 @app.route('/api/backups', methods=['GET'])
+@require_auth
 def get_backup_history():
     """Get backup file history"""
     try:
@@ -425,8 +543,127 @@ def save_devices_cache(devices):
     with open(cache_file, 'w') as f:
         json.dump(devices, f, indent=2)
 
+def generate_backup_pdf(backup_data):
+    """Generate PDF report for backup history"""
+    buffer = io.BytesIO()
+    
+    # Create the PDF document
+    doc = SimpleDocTemplate(buffer, pagesize=A4)
+    elements = []
+    
+    # Define styles
+    styles = getSampleStyleSheet()
+    title_style = ParagraphStyle(
+        'CustomTitle',
+        parent=styles['Heading1'],
+        fontSize=18,
+        spaceAfter=30,
+        textColor=colors.darkblue,
+        alignment=1  # Center alignment
+    )
+    
+    # Add title
+    title = Paragraph("Solange Network Automation - Backup History Report", title_style)
+    elements.append(title)
+    elements.append(Spacer(1, 20))
+    
+    # Add generation info
+    info_style = styles['Normal']
+    info = Paragraph(f"Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", info_style)
+    elements.append(info)
+    elements.append(Paragraph(f"Generated by: {get_current_user()}", info_style))
+    elements.append(Spacer(1, 20))
+    
+    # Create table data
+    table_data = [['Device Name', 'File Name', 'Size', 'Date Created']]
+    
+    for backup in backup_data:
+        table_data.append([
+            backup.get('device', 'Unknown'),
+            backup.get('filename', 'Unknown'),
+            backup.get('size', 'Unknown'),
+            backup.get('date', 'Unknown')
+        ])
+    
+    # Create table
+    table = Table(table_data)
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.darkblue),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 12),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+    ]))
+    
+    elements.append(table)
+    elements.append(Spacer(1, 20))
+    
+    # Add footer
+    footer = Paragraph(
+        "This report contains backup file information from Solange Network Automation Suite.",
+        styles['Normal']
+    )
+    elements.append(footer)
+    
+    # Build PDF
+    doc.build(elements)
+    buffer.seek(0)
+    return buffer
+
+@app.route('/api/backups/pdf', methods=['GET'])
+@require_auth
+def download_backup_pdf():
+    """Download backup history as PDF"""
+    try:
+        # Get backup data (same as get_backup_history)
+        backup_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'backups')
+        backups = []
+        
+        if os.path.exists(backup_dir):
+            for file in os.listdir(backup_dir):
+                if file.endswith('.cfg') or file.endswith('.txt'):
+                    file_path = os.path.join(backup_dir, file)
+                    stat = os.path.stat(file_path)
+                    
+                    # Extract device name from filename
+                    device_name = file.split('_')[0] if '_' in file else file.split('.')[0]
+                    
+                    backups.append({
+                        'device': device_name,
+                        'filename': file,
+                        'size': f"{stat.st_size / 1024:.1f} KB",
+                        'date': datetime.fromtimestamp(stat.st_mtime).strftime('%Y-%m-%d %H:%M:%S')
+                    })
+        
+        # Sort by date (newest first)
+        backups.sort(key=lambda x: x['date'], reverse=True)
+        
+        # Generate PDF
+        pdf_buffer = generate_backup_pdf(backups)
+        
+        # Create response
+        response = make_response(pdf_buffer.getvalue())
+        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = f'attachment; filename=backup_history_{datetime.now().strftime("%Y%m%d_%H%M%S")}.pdf'
+        
+        return response
+        
+    except Exception as e:
+        logger.error(f"PDF generation error: {e}")
+        return jsonify({'error': str(e)}), 500
+
 def load_devices_cache():
-    """Load devices from cache file"""
+    """Load devices from database or cache file"""
+    if DATABASE_ENABLED:
+        try:
+            return get_devices_hybrid()
+        except Exception as e:
+            logger.error(f"Error loading devices from database: {e}")
+    
+    # Fallback to file cache
     cache_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config', 'devices_cache.json')
     if os.path.exists(cache_file):
         with open(cache_file, 'r') as f:

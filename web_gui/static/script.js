@@ -353,6 +353,45 @@ function renderBackupHistory(backups) {
     `).join('');
 }
 
+// Backup PDF download function
+async function downloadBackupPDF() {
+    try {
+        addActivityLog('Generating backup history PDF...', 'info');
+        
+        const response = await fetch(`${API_BASE}/backups/pdf`);
+        
+        if (!response.ok) {
+            throw new Error('Failed to generate PDF');
+        }
+        
+        // Create download link
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `backup_history_${new Date().toISOString().slice(0,10)}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+        addActivityLog('Backup history PDF downloaded successfully', 'success');
+        showNotification('PDF report downloaded successfully!', 'success');
+        
+    } catch (error) {
+        console.error('Error downloading PDF:', error);
+        addActivityLog(`PDF download failed: ${error.message}`, 'error');
+        showNotification('Failed to download PDF report', 'error');
+    }
+}
+
+// Refresh backup history
+async function refreshBackupHistory() {
+    addActivityLog('Refreshing backup history...', 'info');
+    await loadBackupHistory();
+    showNotification('Backup history refreshed', 'success');
+}
+
 // Configuration functions
 async function applyConfiguration() {
     const commands = document.getElementById('configCommands').value.trim();

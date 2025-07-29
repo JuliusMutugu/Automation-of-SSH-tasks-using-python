@@ -1,0 +1,18 @@
+2025-07-29 17:04:18,175 - database.connection - INFO - Initializing database...
+2025-07-29 17:04:20,124 - database.connection - INFO - Database 'ssh_automation' created or already exists
+2025-07-29 17:04:20,216 - database.connection - INFO - Connection pool created successfully with 5 connections
+2025-07-29 17:04:20,221 - database.connection - INFO - Database connection test successful
+2025-07-29 17:04:20,236 - database.migration_manager - INFO - Starting database migrations...
+2025-07-29 17:04:21,897 - database.migration_manager - INFO - Migration tracking table created successfully
+2025-07-29 17:04:21,916 - database.migration_manager - INFO - Executing migration: 001_create_initial_tables.sql
+2025-07-29 17:04:27,854 - database.migration_manager - INFO - Migration 001_create_initial_tables.sql executed successfully
+2025-07-29 17:04:28,806 - database.migration_manager - INFO - Migration 001_create_initial_tables.sql marked as executed
+2025-07-29 17:04:28,806 - database.migration_manager - INFO - Executing migration: 002_insert_default_settings.sql
+2025-07-29 17:04:30,091 - database.migration_manager - INFO - Migration 002_insert_default_settings.sql executed successfully
+2025-07-29 17:04:30,257 - database.migration_manager - INFO - Migration 002_insert_default_settings.sql marked as executed
+2025-07-29 17:04:30,258 - database.migration_manager - INFO - Successfully executed 2 migrations
+2025-07-29 17:04:30,259 - database.connection - INFO - Database initialization completed successfully
+2025-07-29 17:04:30,386 - database.connection - INFO - Database 'ssh_automation' created or already exists
+2025-07-29 17:04:30,467 - database.connection - INFO - Connection pool created successfully with 5 connections
+2025-07-29 17:04:30,470 - database.connection - INFO - Database connection test successful
+2025-07-29 17:04:30,474 - database.connection - ERROR - Database query error: Unread result found

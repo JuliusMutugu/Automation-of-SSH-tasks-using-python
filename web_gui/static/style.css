@@ -50,6 +50,52 @@ body {
     font-weight: 600;
 }
 
+/* User Info Styles */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: white;
+}
+
+.user-welcome {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-role {
+    background: rgba(255,255,255,0.2);
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.logout-btn {
+    color: white;
+    text-decoration: none;
+    padding: 8px;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+    display: flex;
+    align-items: center;
+}
+
+.logout-btn:hover {
+    background: rgba(255,255,255,0.2);
+    text-decoration: none;
+}
+
 .status-indicator {
     display: flex;
     align-items: center;
@@ -204,6 +250,21 @@ body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+}
+
+.card-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.card-actions .btn.small {
+    padding: 6px 12px;
+    font-size: 12px;
+    min-width: auto;
+}
+
+.card-actions .btn.small i {
+    margin-right: 4px;
 }
 
 .card-body {
