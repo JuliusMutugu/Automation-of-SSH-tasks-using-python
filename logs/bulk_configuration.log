@@ -63,3 +63,64 @@ de...
 deciRouter#
 2025-07-29 13:54:42,328 - INFO - Configuration applied to R2 (library) successfully.
 2025-07-29 13:54:44,365 - INFO - Bulk configuration completed: 2/2 devices successful
+2025-07-29 14:57:37,251 - INFO - Starting bulk configuration process...
+2025-07-29 14:57:37,252 - INFO - Loading device config from: C:\Users\Julimore\Documents\SolangeFinalPresentation\Automation-of-SSH-tasks-using-python\config\devices_config.yaml
+2025-07-29 14:57:37,254 - INFO - Loaded config: {'devices': [{'device_type': 'cisco_ios_telnet', 'fast_cli': False, 'global_delay_factor': 2, 'host': '127.0.0.1', 'last_tested': '2025-07-29T14:55:25.623905', 'management_ip': '192.168.1.10', 'name': 'R1', 'password': '', 'port': 5000, 'real_hostname': 'Baraton', 'secret': '', 'timeout': 30, 'username': ''}, {'device_type': 'cisco_ios_telnet', 'fast_cli': False, 'global_delay_factor': 2, 'host': '127.0.0.1', 'last_tested': '2025-07-29T14:55:34.074797', 'management_ip': '192.168.1.20', 'name': 'R2', 'password': '', 'port': 5008, 'real_hostname': 'deciRouter', 'secret': '', 'timeout': 30, 'username': ''}]}
+2025-07-29 14:57:37,255 - INFO - Loaded 17 configuration commands
+2025-07-29 14:57:37,255 - INFO - Starting bulk configuration of 2 devices...
+2025-07-29 14:57:37,256 - INFO - Commands to apply: 17
+2025-07-29 14:57:37,256 - INFO - Connecting to R1 (127.0.0.1:5000) via console
+2025-07-29 14:57:40,396 - INFO - Connected to R1 - Baraton via console
+2025-07-29 14:57:40,397 - INFO - Applying 17 commands to R1
+2025-07-29 14:57:44,648 - INFO - Configuration output for R1: configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+Baraton(config)#interface loopback 0
+Baraton(config-if)#ip address 192.168.100.1 255.255.255.255
+Baraton(config-if)#no ...
+2025-07-29 14:57:46,811 - INFO - Save result for R1: Building configuration...
+[OK]
+2025-07-29 14:57:46,811 - INFO - Configuration applied to R1 (Baraton) successfully.
+2025-07-29 14:57:48,823 - INFO - Connecting to R2 (127.0.0.1:5008) via console
+2025-07-29 14:57:52,822 - INFO - Connected to R2 - deciRouter via console
+2025-07-29 14:57:52,824 - INFO - Applying 17 commands to R2
+2025-07-29 14:57:57,108 - INFO - Configuration output for R2: configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+deciRouter(co
+deciRouter(config)#interface loopback 0
+deciRouter(config-if)#ip address 192.168.100.1 255.255.255.255
+de...
+2025-07-29 14:57:59,184 - INFO - Save result for R2: Building configuration...
+[OK]
+2025-07-29 14:57:59,185 - INFO - Configuration applied to R2 (deciRouter) successfully.
+2025-07-29 14:58:01,198 - INFO - Bulk configuration completed: 2/2 devices successful
+2025-07-29 15:04:58,492 - INFO - Starting bulk configuration process...
+2025-07-29 15:04:58,493 - INFO - Loading device config from: C:\Users\Julimore\Documents\SolangeFinalPresentation\Automation-of-SSH-tasks-using-python\config\devices_config.yaml
+2025-07-29 15:04:58,495 - INFO - Loaded config: {'devices': [{'device_type': 'cisco_ios_telnet', 'fast_cli': False, 'global_delay_factor': 2, 'host': '127.0.0.1', 'last_tested': '2025-07-29T15:03:12.246098', 'management_ip': '192.168.1.10', 'name': 'R1', 'password': '', 'port': 5000, 'real_hostname': 'Baraton', 'secret': '', 'timeout': 30, 'username': ''}, {'device_type': 'cisco_ios_telnet', 'fast_cli': False, 'global_delay_factor': 2, 'host': '127.0.0.1', 'last_tested': '2025-07-29T15:03:21.314725', 'management_ip': '192.168.1.20', 'name': 'R2', 'password': '', 'port': 5008, 'real_hostname': 'deciRouter', 'secret': '', 'timeout': 30, 'username': ''}]}
+2025-07-29 15:04:58,496 - INFO - Loaded 17 configuration commands
+2025-07-29 15:04:58,496 - INFO - Starting bulk configuration of 2 devices...
+2025-07-29 15:04:58,497 - INFO - Commands to apply: 17
+2025-07-29 15:04:58,497 - INFO - Connecting to R1 (127.0.0.1:5000) via console
+2025-07-29 15:05:01,983 - INFO - Connected to R1 - Baraton via console
+2025-07-29 15:05:01,983 - INFO - Applying 17 commands to R1
+2025-07-29 15:05:06,261 - INFO - Configuration output for R1: configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+Baraton(confi
+Baraton(config)#interface loopback 0
+Baraton(config-if)#ip address 192.168.100.1 255.255.255.255
+Baraton(...
+2025-07-29 15:05:08,144 - INFO - Save result for R1: Building configuration...
+[OK]
+2025-07-29 15:05:08,144 - INFO - Configuration applied to R1 (Baraton) successfully.
+2025-07-29 15:05:10,178 - INFO - Connecting to R2 (127.0.0.1:5008) via console
+2025-07-29 15:05:14,064 - INFO - Connected to R2 - deciRouter via console
+2025-07-29 15:05:14,065 - INFO - Applying 17 commands to R2
+2025-07-29 15:05:18,287 - INFO - Configuration output for R2: configure terminal
+Enter configuration commands, one per line.  End with CNTL/Z.
+deciRouter(co
+deciRouter(config)#interface loopback 0
+deciRouter(config-if)#ip address 192.168.100.1 255.255.255.255
+de...
+2025-07-29 15:05:20,272 - INFO - Save result for R2: Building configuration...
+[OK]
+2025-07-29 15:05:20,272 - INFO - Configuration applied to R2 (deciRouter) successfully.
+2025-07-29 15:05:22,294 - INFO - Bulk configuration completed: 2/2 devices successful

@@ -3,7 +3,7 @@ devices:
   fast_cli: false
   global_delay_factor: 2
   host: 127.0.0.1
-  last_tested: '2025-07-29T14:22:58.568284'
+  last_tested: '2025-07-29T15:38:20.295513'
   management_ip: 192.168.1.10
   name: R1
   password: ''
@@ -16,7 +16,7 @@ devices:
   fast_cli: false
   global_delay_factor: 2
   host: 127.0.0.1
-  last_tested: '2025-07-29T14:23:07.523336'
+  last_tested: '2025-07-29T15:38:28.950762'
   management_ip: 192.168.1.20
   name: R2
   password: ''

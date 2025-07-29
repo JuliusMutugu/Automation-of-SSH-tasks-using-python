@@ -198,34 +198,65 @@ function renderDevices() {
         <div class="device-card">
             <div class="device-header">
                 <div class="device-name">
-                    <i class="fas fa-${getDeviceIcon(device.type)}"></i>
-                    ${device.name}
+                    <i class="fas fa-${getDeviceIcon(device.device_type || device.type)}"></i>
+                    <div class="device-name-info">
+                        <span class="device-label">${device.name}</span>
+                        ${device.real_hostname && device.real_hostname !== device.name ? 
+                            `<span class="device-hostname">(${device.real_hostname})</span>` : ''}
+                    </div>
                 </div>
                 <div class="device-status ${device.status}">
+                    <i class="fas fa-circle"></i>
                     ${device.status.toUpperCase()}
                 </div>
             </div>
             <div class="device-info">
-                <p><strong>IP:</strong> ${device.ip}</p>
-                <p><strong>Type:</strong> ${device.type}</p>
-                <p><strong>Last Seen:</strong> ${device.lastSeen}</p>
+                <div class="device-info-grid">
+                    <div class="info-item">
+                        <i class="fas fa-globe"></i>
+                        <span><strong>Management IP:</strong> ${device.host || device.ip}:${device.port || 22}</span>
+                    </div>
+                    ${device.console_host && device.console_port ? `
+                    <div class="info-item">
+                        <i class="fas fa-terminal"></i>
+                        <span><strong>Console:</strong> ${device.console_host}:${device.console_port}</span>
+                    </div>
+                    ` : ''}
+                    <div class="info-item">
+                        <i class="fas fa-microchip"></i>
+                        <span><strong>Type:</strong> ${device.device_type || device.type}</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-link"></i>
+                        <span><strong>Connection:</strong> ${device.connection_type || 'SSH'}</span>
+                    </div>
+                    ${device.uptime ? `
+                    <div class="info-item">
+                        <i class="fas fa-clock"></i>
+                        <span><strong>Uptime:</strong> ${device.uptime}</span>
+                    </div>
+                    ` : ''}
+                    <div class="info-item">
+                        <i class="fas fa-calendar"></i>
+                        <span><strong>Last Updated:</strong> ${formatDateTime(device.last_updated || device.lastSeen)}</span>
+                    </div>
+                </div>
             </div>
             <div class="device-actions">
                 <button class="btn primary" onclick="testDevice('${device.name}')" ${device.status === 'offline' ? 'disabled' : ''}>
                     <i class="fas fa-wifi"></i>
-                    Test
+                    Test Connection
                 </button>
                 <button class="btn secondary" onclick="configureDevice('${device.name}')" ${device.status === 'offline' ? 'disabled' : ''}>
                     <i class="fas fa-cog"></i>
                     Configure
                 </button>
-                <button class="btn info" onclick="backupDevice('${device.name}')" ${device.status === 'offline' ? 'disabled' : ''}>
-                    <i class="fas fa-download"></i>
-                    Backup
+                <button class="btn info" onclick="showDeviceDetails('${device.name}')" title="Show detailed information">
+                    <i class="fas fa-info-circle"></i>
+                    Details
                 </button>
             </div>
-        </div>
-    `).join('');
+        </div>`).join('');
 }
 
 function getDeviceIcon(type) {
@@ -589,16 +620,37 @@ function testConnectivity() {
 }
 
 function refreshDevices() {
-    if (devices.length === 0) {
-        discoverDevices();
-    } else {
+    // Always fetch fresh device data from the API
+    fetchDevices();
+}
+
+async function fetchDevices() {
+    try {
+        addActivityLog('Loading devices...', 'info');
+        const response = await apiCall('/devices');
+        
+        if (response.success && response.devices) {
+            devices = response.devices;
+            renderDevices();
+            updateDeviceCount();
+            addActivityLog(`Loaded ${devices.length} devices`, 'success');
+        } else {
+            addActivityLog('No devices found', 'warning');
+            devices = [];
+            renderDevices();
+            updateDeviceCount();
+        }
+    } catch (error) {
+        console.error('Error fetching devices:', error);
+        addActivityLog('Failed to load devices', 'error');
+        devices = [];
         renderDevices();
-        addActivityLog('Device list refreshed', 'info');
+        updateDeviceCount();
     }
 }
 
-function loadDevices() {
-    renderDevices();
+function refreshDevices() {
+    loadDevices();
 }
 
 function viewLogs() {
@@ -1047,6 +1099,52 @@ function deleteBackup(filename) {
         addActivityLog(`Deleted backup: ${filename}`, 'warning');
         loadBackupHistory();
     }
+}
+
+// Helper function to format date/time
+function formatDateTime(dateString) {
+    if (!dateString) return 'Unknown';
+    try {
+        const date = new Date(dateString);
+        return date.toLocaleString();
+    } catch (e) {
+        return dateString;
+    }
+}
+
+// Function to show detailed device information
+function showDeviceDetails(deviceName) {
+    const device = devices.find(d => d.name === deviceName);
+    if (!device) {
+        alert('Device not found');
+        return;
+    }
+    
+    let detailsHtml = `
+        <h3>Device Details: ${device.name}</h3>
+        <table class="device-details-table">
+            <tr><td><strong>Name:</strong></td><td>${device.name}</td></tr>
+            <tr><td><strong>Real Hostname:</strong></td><td>${device.real_hostname || 'N/A'}</td></tr>
+            <tr><td><strong>Management IP:</strong></td><td>${device.host || device.ip}:${device.port || 22}</td></tr>
+            <tr><td><strong>Device Type:</strong></td><td>${device.device_type || device.type}</td></tr>
+            <tr><td><strong>Connection Type:</strong></td><td>${device.connection_type || 'SSH'}</td></tr>
+            <tr><td><strong>Status:</strong></td><td><span class="status-${device.status}">${device.status.toUpperCase()}</span></td></tr>
+    `;
+    
+    if (device.console_host && device.console_port) {
+        detailsHtml += `<tr><td><strong>Console Access:</strong></td><td>${device.console_host}:${device.console_port}</td></tr>`;
+    }
+    
+    if (device.uptime) {
+        detailsHtml += `<tr><td><strong>Uptime:</strong></td><td>${device.uptime}</td></tr>`;
+    }
+    
+    detailsHtml += `
+            <tr><td><strong>Last Updated:</strong></td><td>${formatDateTime(device.last_updated || device.lastSeen)}</td></tr>
+        </table>
+    `;
+    
+    showModal('Device Details', detailsHtml);
 }
 
 function scheduleBackup() {

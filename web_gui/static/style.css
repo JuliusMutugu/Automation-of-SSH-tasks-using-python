@@ -347,16 +347,41 @@ body {
 }
 
 .device-name {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.device-name-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.device-label {
     font-weight: 600;
     font-size: 1.1rem;
     color: #2c3e50;
 }
 
+.device-hostname {
+    font-size: 0.9rem;
+    color: #6c757d;
+    font-style: italic;
+}
+
 .device-status {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
     font-size: 0.8rem;
     font-weight: 500;
+}
+
+.device-status i {
+    font-size: 0.6rem;
 }
 
 .device-status.online {
@@ -371,6 +396,57 @@ body {
 
 .device-info {
     margin-bottom: 1rem;
+}
+
+.device-info-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.3rem 0;
+    font-size: 0.85rem;
+}
+
+.info-item i {
+    color: #3498db;
+    width: 1rem;
+    text-align: center;
+}
+
+.info-item span {
+    color: #6c757d;
+}
+
+.device-details-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.device-details-table td {
+    padding: 0.5rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.device-details-table td:first-child {
+    width: 150px;
+    color: #495057;
+    font-weight: 500;
+}
+
+.status-online {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.status-offline {
+    color: #dc3545;
+    font-weight: bold;
 }
 
 .device-info p {

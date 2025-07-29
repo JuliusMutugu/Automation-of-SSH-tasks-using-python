@@ -172,21 +172,6 @@ def test_console_connectivity(device):
         logging.error(f"Console connection failed for {device['name']}: {str(e)}")
         print(f"  Failed to connect: {str(e)}")
         return None
-    import requests
-    nodes_url = f"http://localhost:3080/v2/projects/{project_id}/nodes"
-    response = requests.get(nodes_url)
-    
-    if response.status_code == 200:
-        nodes_data = response.json()
-        print(f"✓ Found {len(nodes_data)} nodes in project")
-    else:
-        print(f"✗ Failed to get nodes: HTTP {response.status_code}")
-        exit(1)
-        
-except Exception as e:
-    print(f"✗ Failed to get project 'Solange': {e}")
-    print("Make sure the 'Solange' project is open in GNS3")
-    exit(1)
 
 # Function to scan for SSH services on common IP ranges
 def scan_for_ssh_devices(base_network="192.168.1", timeout=2):

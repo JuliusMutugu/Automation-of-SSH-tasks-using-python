@@ -10,8 +10,8 @@
     "console_port": 5000,
     "actual_connection": "console_telnet",
     "real_hostname": "Baraton",
-    "uptime": "Baraton uptime is 1 hour, 16 minutes",
-    "last_updated": "2025-07-29T14:22:58.568284"
+    "uptime": "Baraton uptime is 2 hours, 18 minutes",
+    "last_updated": "2025-07-29T15:38:20.295513"
   },
   {
     "name": "R2",
@@ -24,7 +24,7 @@
     "console_port": 5008,
     "actual_connection": "console_telnet",
     "real_hostname": "deciRouter",
-    "uptime": "deciRouter uptime is 1 hour, 15 minutes",
-    "last_updated": "2025-07-29T14:23:07.523336"
+    "uptime": "deciRouter uptime is 2 hours, 17 minutes",
+    "last_updated": "2025-07-29T15:38:28.950762"
   }
 ]

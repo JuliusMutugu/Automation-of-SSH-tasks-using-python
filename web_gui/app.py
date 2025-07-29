@@ -84,9 +84,8 @@ def discover_devices():
                 
                 if result.returncode == 0:
                     operation_manager.add_log('Device discovery completed successfully')
-                    # Parse the output to extract device information
-                    devices = parse_discovery_output(result.stdout)
-                    save_devices_cache(devices)
+                    # The hybrid script already saves devices_cache.json, so just reload it
+                    operation_manager.add_log('Device cache updated with latest discovery results')
                 else:
                     operation_manager.add_log(f'Device discovery failed: {result.stderr}', 'error')
                     
@@ -439,7 +438,7 @@ if __name__ == '__main__':
     print("  SOLANGE NETWORK AUTOMATION WEB INTERFACE")
     print("=" * 60)
     print("  Starting web server...")
-    print("  Open your browser to: http://localhost:5000")
+    print("  Open your browser to: http://localhost:5001")
     print("=" * 60)
     
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5001)

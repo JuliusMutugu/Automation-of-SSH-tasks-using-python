@@ -1,35 +1,59 @@
+#!/usr/bin/env python3
+"""
+Bulk Configuration Script for Network Devices
+Applies bulk configuration commands to all devices via console.
+Uses hybrid SSH-console setup with real device data.
+"""
+
 import os
 import time
-from netmiko import ConnectHandler
 import yaml
 import logging
+from netmiko import ConnectHandler
 
 # Set up logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('../logs/bulk_configuration.log'),
+        logging.FileHandler(os.path.join(os.path.dirname(__file__), '../logs/bulk_configuration.log')),
         logging.StreamHandler()
     ]
 )
 
-# Load device configurations from YAML file
-def load_device_config(config_file=None):
-    if config_file is None:
-        config_file = os.path.abspath(os.path.join(os.path.dirname(__file__), '../config/devices_config.yaml'))
-    import os
-    abs_path = os.path.abspath(config_file)
-    logging.info(f"Attempting to load device config from: {abs_path}")
+def load_device_config():
+    """Load device configurations from YAML file"""
+    config_file = os.path.abspath(os.path.join(os.path.dirname(__file__), '../config/devices_config.yaml'))
+    logging.info(f"Loading device config from: {config_file}")
+    
     try:
         with open(config_file, 'r') as file:
-            return yaml.safe_load(file)
+            config = yaml.safe_load(file)
+            logging.info(f"Loaded config: {config}")
+            return config
     except FileNotFoundError:
-        logging.error(f"Configuration file {config_file} not found. Please run the main connection script first.")
+        logging.error(f"Configuration file {config_file} not found.")
+        return None
+    except Exception as e:
+        logging.error(f"Error loading config: {e}")
         return None
 
-# Function to apply configuration to a device
+def load_configuration_commands():
+    """Load bulk configuration commands from file"""
+    config_file = os.path.join(os.path.dirname(__file__), '../config/bulk_config_commands.txt')
+    
+    try:
+        with open(config_file, 'r') as file:
+            commands = [line.strip() for line in file.readlines() 
+                       if line.strip() and not line.strip().startswith('#')]
+            logging.info(f"Loaded {len(commands)} configuration commands")
+            return commands
+    except FileNotFoundError:
+        logging.error(f"Configuration commands file {config_file} not found.")
+        return []
+
 def apply_bulk_configuration(device, config_commands):
+    """Apply configuration to a single device"""
     try:
         # Clean device config for netmiko - remove metadata fields
         clean_config = {
@@ -44,122 +68,70 @@ def apply_bulk_configuration(device, config_commands):
             'global_delay_factor': device.get('global_delay_factor', 2)
         }
         
+        logging.info(f"Connecting to {device['name']} ({device['host']}:{device['port']}) via console")
+        
         # Establish console telnet connection to the device
         connection = ConnectHandler(**clean_config)
         connection.enable()
-        logging.info(f"Connected to {device.get('name', device['host'])} via console")
+        logging.info(f"Connected to {device['name']} - {device.get('real_hostname', 'Unknown')} via console")
 
-        # Enter global configuration mode
-        connection.send_command('configure terminal')
+        # Apply configuration commands using send_config_set (handles prompts automatically)
+        logging.info(f"Applying {len(config_commands)} commands to {device['name']}")
+        
+        # Filter out comments and empty lines
+        clean_commands = [cmd.strip() for cmd in config_commands 
+                         if cmd.strip() and not cmd.strip().startswith('#')]
+        
+        # Apply all commands at once
+        result = connection.send_config_set(clean_commands)
+        logging.info(f"Configuration output for {device['name']}: {result[:200]}...")
+        
+        # Save configuration
+        save_result = connection.send_command('write memory')
+        logging.info(f"Save result for {device['name']}: {save_result}")
 
-        # Apply each configuration command
-        for command in config_commands:
-            if command.strip() and not command.strip().startswith('#'):  # Skip empty lines and comments
-                logging.info(f"Applying command: {command.strip()}")
-                result = connection.send_command(command.strip())
-                time.sleep(0.5)  # Delay between commands to avoid overwhelming the device
-
-        # Commit changes
-        connection.send_command('end')
-        connection.send_command('write memory')  # Save the configuration
-
-        logging.info(f"Configuration applied to {device.get('name', device['host'])} successfully.")
-
-        # Close the SSH connection
+        logging.info(f"Configuration applied to {device['name']} ({device.get('real_hostname')}) successfully.")
         connection.disconnect()
         return True
+        
     except Exception as e:
-        logging.error(f"Failed to apply configuration for {device.get('name', device['host'])}: {e}")
+        logging.error(f"Failed to apply configuration to {device['name']}: {e}")
         return False
 
-# Function to load bulk configuration commands from a file
-def load_configuration_commands(config_file='config/bulk_config_commands.txt'):
-    try:
-        with open(config_file, 'r') as file:
-            return [line.strip() for line in file.readlines() if line.strip() and not line.strip().startswith('#')]
-    except FileNotFoundError:
-        logging.error(f"Configuration commands file {config_file} not found.")
-        # Create a sample file
-        sample_commands = [
-            "# Sample bulk configuration commands",
-            "# Add your commands below (one per line)",
-            "# Example commands:",
-            "# interface loopback 0",
-            "# ip address 192.168.1.1 255.255.255.255",
-            "# no shutdown",
-            "# exit",
-            "# ip route 0.0.0.0 0.0.0.0 192.168.1.254"
-        ]
-        os.makedirs(os.path.dirname(config_file), exist_ok=True)
-        with open(config_file, 'w') as file:
-            file.write('\n'.join(sample_commands))
-        logging.info(f"Created sample configuration file: {config_file}")
-        return []
-
-# Function to apply configuration to all devices
-def apply_bulk_configuration_to_all_devices():
+def main():
+    """Main function to apply bulk configuration to all devices"""
+    logging.info("Starting bulk configuration process...")
+    
+    # Load device configuration
     device_config = load_device_config()
     if not device_config:
-        logging.error("Device config could not be loaded or is empty.")
+        logging.error("Could not load device configuration. Exiting.")
         return
-
-    # Debug: print what was loaded
-    logging.info(f"Loaded device config: {device_config}")
-
-    devices = device_config.get('devices') if isinstance(device_config, dict) else None
-    if not devices or not isinstance(devices, list):
-        logging.error("No devices found in config. Check devices_config.yaml format.")
+    
+    devices = device_config.get('devices', [])
+    if not devices:
+        logging.error("No devices found in configuration. Exiting.")
         return
-
+    
+    # Load configuration commands
     config_commands = load_configuration_commands()
     if not config_commands:
-        logging.warning("No configuration commands found. Please edit the bulk_config_commands.txt file.")
+        logging.warning("No configuration commands found. Nothing to apply.")
         return
-
+    
     successful_configs = 0
     total_devices = len(devices)
-
+    
     logging.info(f"Starting bulk configuration of {total_devices} devices...")
     logging.info(f"Commands to apply: {len(config_commands)}")
-
+    
+    # Apply configuration to each device
     for device in devices:
         if apply_bulk_configuration(device, config_commands):
             successful_configs += 1
         time.sleep(2)  # Delay between devices
-
+    
     logging.info(f"Bulk configuration completed: {successful_configs}/{total_devices} devices successful")
 
-# Function to create custom configuration templates
-def create_config_template(template_name, commands):
-    template_dir = "../config/templates"
-    os.makedirs(template_dir, exist_ok=True)
-    
-    template_file = f"{template_dir}/{template_name}.txt"
-    with open(template_file, 'w') as file:
-        file.write('\n'.join(commands))
-    
-    logging.info(f"Configuration template saved: {template_file}")
-
-# Function to apply specific template to devices
-def apply_template_to_devices(template_name, device_names=None):
-    template_file = f"../config/templates/{template_name}.txt"
-    
-    if not os.path.exists(template_file):
-        logging.error(f"Template file {template_file} not found")
-        return
-    
-    device_config = load_device_config()
-    if not device_config:
-        return
-    
-    config_commands = load_configuration_commands(template_file)
-    
-    devices_to_configure = device_config['devices']
-    if device_names:
-        devices_to_configure = [d for d in device_config['devices'] if d.get('name') in device_names]
-    
-    for device in devices_to_configure:
-        apply_bulk_configuration(device, config_commands)
-
 if __name__ == "__main__":
-    apply_bulk_configuration_to_all_devices()
+    main()
