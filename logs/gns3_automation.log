@@ -53,3 +53,79 @@
 2025-07-29 14:03:21,868 - INFO - Found router: R2 accessible via 127.0.0.1:5008 (telnet)
 2025-07-29 14:03:31,540 - INFO - Console connection successful to R1 (127.0.0.1:5000)
 2025-07-29 14:03:39,831 - INFO - Console connection successful to R2 (127.0.0.1:5008)
+2025-07-29 14:08:15,794 - INFO - Found router: R1 accessible via 127.0.0.1:5000 (telnet)
+2025-07-29 14:08:15,794 - INFO - Found router: R2 accessible via 127.0.0.1:5008 (telnet)
+2025-07-29 14:08:25,663 - INFO - Console connection successful to R1 (127.0.0.1:5000)
+2025-07-29 14:08:35,715 - INFO - Console connection successful to R2 (127.0.0.1:5008)
+2025-07-29 14:13:11,423 - INFO - Connected to GNS3 server
+2025-07-29 14:13:11,435 - INFO - Found project: Solange
+2025-07-29 14:13:11,443 - INFO - Found 7 nodes in project
+2025-07-29 14:13:11,444 - INFO - Found router: R1 accessible via 127.0.0.1:5000 (telnet)
+2025-07-29 14:13:11,444 - INFO - Skipping Switch1 - ethernet_switch (not a router)
+2025-07-29 14:13:11,444 - INFO - Skipping PC1 - vpcs (not a router)
+2025-07-29 14:13:11,445 - INFO - Skipping PC2 - vpcs (not a router)
+2025-07-29 14:13:11,445 - INFO - Skipping PC3 - vpcs (not a router)
+2025-07-29 14:13:11,445 - INFO - Found router: R2 accessible via 127.0.0.1:5008 (telnet)
+2025-07-29 14:13:11,446 - INFO - Skipping PC4 - vpcs (not a router)
+2025-07-29 14:13:11,447 - INFO - Connecting to R1 via 127.0.0.1:5000 (telnet)
+2025-07-29 14:13:20,887 - INFO - Console connection successful to R1 (127.0.0.1:5000)
+2025-07-29 14:13:20,888 - INFO - Real device uptime: Baraton uptime is 1 hour, 6 minutes
+2025-07-29 14:13:20,922 - INFO - Connecting to R2 via 127.0.0.1:5008 (telnet)
+2025-07-29 14:13:30,195 - INFO - Console connection successful to R2 (127.0.0.1:5008)
+2025-07-29 14:13:30,196 - INFO - Real device uptime: deciRouter uptime is 1 hour, 5 minutes
+2025-07-29 14:13:30,226 - INFO - YAML configuration saved to config/devices_config.yaml
+2025-07-29 14:13:30,227 - INFO - JSON cache saved to config/devices_cache.json
+2025-07-29 14:14:04,883 - INFO - Connected to GNS3 server
+2025-07-29 14:14:04,895 - INFO - Found project: Solange
+2025-07-29 14:14:04,901 - INFO - Found 7 nodes in project
+2025-07-29 14:14:04,901 - INFO - Found router: R1 accessible via 127.0.0.1:5000 (telnet)
+2025-07-29 14:14:04,901 - INFO - Skipping Switch1 - ethernet_switch (not a router)
+2025-07-29 14:14:04,901 - INFO - Skipping PC1 - vpcs (not a router)
+2025-07-29 14:14:04,901 - INFO - Skipping PC2 - vpcs (not a router)
+2025-07-29 14:14:04,901 - INFO - Skipping PC3 - vpcs (not a router)
+2025-07-29 14:14:04,901 - INFO - Found router: R2 accessible via 127.0.0.1:5008 (telnet)
+2025-07-29 14:14:04,901 - INFO - Skipping PC4 - vpcs (not a router)
+2025-07-29 14:14:04,901 - INFO - Connecting to R1 via 127.0.0.1:5000 (telnet)
+2025-07-29 14:14:14,248 - INFO - Console connection successful to R1 (127.0.0.1:5000)
+2025-07-29 14:14:14,249 - INFO - Real device uptime: Baraton uptime is 1 hour, 7 minutes
+2025-07-29 14:14:14,260 - INFO - Connecting to R2 via 127.0.0.1:5008 (telnet)
+2025-07-29 14:14:23,683 - INFO - Console connection successful to R2 (127.0.0.1:5008)
+2025-07-29 14:14:23,683 - INFO - Real device uptime: deciRouter uptime is 1 hour, 6 minutes
+2025-07-29 14:14:23,697 - INFO - YAML configuration saved to config/devices_config.yaml
+2025-07-29 14:14:23,698 - INFO - JSON cache saved to config/devices_cache.json
+2025-07-29 14:21:51,131 - INFO - Connected to GNS3 server
+2025-07-29 14:21:51,145 - INFO - Found project: Solange
+2025-07-29 14:21:51,150 - INFO - Found 7 nodes in project
+2025-07-29 14:21:51,150 - INFO - Found router: R1 accessible via 127.0.0.1:5000 (telnet)
+2025-07-29 14:21:51,150 - INFO - Skipping Switch1 - ethernet_switch (not a router)
+2025-07-29 14:21:51,150 - INFO - Skipping PC1 - vpcs (not a router)
+2025-07-29 14:21:51,150 - INFO - Skipping PC2 - vpcs (not a router)
+2025-07-29 14:21:51,150 - INFO - Skipping PC3 - vpcs (not a router)
+2025-07-29 14:21:51,151 - INFO - Found router: R2 accessible via 127.0.0.1:5008 (telnet)
+2025-07-29 14:21:51,151 - INFO - Skipping PC4 - vpcs (not a router)
+2025-07-29 14:21:51,151 - INFO - Connecting to R1 via 127.0.0.1:5000 (telnet)
+2025-07-29 14:22:00,791 - INFO - Console connection successful to R1 (127.0.0.1:5000)
+2025-07-29 14:22:00,792 - INFO - Real device uptime: Baraton uptime is 1 hour, 15 minutes
+2025-07-29 14:22:00,825 - INFO - Connecting to R2 via 127.0.0.1:5008 (telnet)
+2025-07-29 14:22:10,275 - INFO - Console connection successful to R2 (127.0.0.1:5008)
+2025-07-29 14:22:10,276 - INFO - Real device uptime: deciRouter uptime is 1 hour, 14 minutes
+2025-07-29 14:22:10,312 - INFO - YAML configuration saved to config/devices_config.yaml
+2025-07-29 14:22:10,314 - INFO - JSON cache saved to config/devices_cache.json
+2025-07-29 14:22:48,815 - INFO - Connected to GNS3 server
+2025-07-29 14:22:48,827 - INFO - Found project: Solange
+2025-07-29 14:22:48,833 - INFO - Found 7 nodes in project
+2025-07-29 14:22:48,833 - INFO - Found router: R1 accessible via 127.0.0.1:5000 (telnet)
+2025-07-29 14:22:48,833 - INFO - Skipping Switch1 - ethernet_switch (not a router)
+2025-07-29 14:22:48,833 - INFO - Skipping PC1 - vpcs (not a router)
+2025-07-29 14:22:48,833 - INFO - Skipping PC2 - vpcs (not a router)
+2025-07-29 14:22:48,833 - INFO - Skipping PC3 - vpcs (not a router)
+2025-07-29 14:22:48,834 - INFO - Found router: R2 accessible via 127.0.0.1:5008 (telnet)
+2025-07-29 14:22:48,834 - INFO - Skipping PC4 - vpcs (not a router)
+2025-07-29 14:22:48,834 - INFO - Connecting to R1 via 127.0.0.1:5000 (telnet)
+2025-07-29 14:22:58,533 - INFO - Console connection successful to R1 (127.0.0.1:5000)
+2025-07-29 14:22:58,534 - INFO - Real device uptime: Baraton uptime is 1 hour, 16 minutes
+2025-07-29 14:22:58,568 - INFO - Connecting to R2 via 127.0.0.1:5008 (telnet)
+2025-07-29 14:23:07,488 - INFO - Console connection successful to R2 (127.0.0.1:5008)
+2025-07-29 14:23:07,489 - INFO - Real device uptime: deciRouter uptime is 1 hour, 15 minutes
+2025-07-29 14:23:07,527 - INFO - YAML configuration saved to config/devices_config.yaml
+2025-07-29 14:23:07,529 - INFO - JSON cache saved to config/devices_cache.json

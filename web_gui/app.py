@@ -73,7 +73,7 @@ def discover_devices():
                 operation_manager.add_log('Starting device discovery...')
                 
                 # Change to the correct directory and run the script
-                script_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'connectionGNS3', 'enable_new.py')
+                script_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'connectionGNS3', 'enable_hybrid.py')
                 
                 result = subprocess.run(
                     [sys.executable, script_path],
@@ -270,8 +270,11 @@ def manage_passwords():
 @app.route('/api/operation/status', methods=['GET'])
 def get_operation_status():
     """Get current operation status and logs"""
+    operation_complete = operation_manager.current_operation is None
     return jsonify({
+        'success': True,
         'current_operation': operation_manager.current_operation,
+        'operation_complete': operation_complete,
         'logs': operation_manager.logs,
         'progress': operation_manager.progress
     })

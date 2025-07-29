@@ -3,9 +3,12 @@ devices:
   fast_cli: false
   global_delay_factor: 2
   host: 127.0.0.1
+  last_tested: '2025-07-29T14:22:58.568284'
+  management_ip: 192.168.1.10
   name: R1
   password: ''
   port: 5000
+  real_hostname: Baraton
   secret: ''
   timeout: 30
   username: ''
@@ -13,9 +16,12 @@ devices:
   fast_cli: false
   global_delay_factor: 2
   host: 127.0.0.1
+  last_tested: '2025-07-29T14:23:07.523336'
+  management_ip: 192.168.1.20
   name: R2
   password: ''
   port: 5008
+  real_hostname: deciRouter
   secret: ''
   timeout: 30
   username: ''
